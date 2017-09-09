@@ -4,16 +4,16 @@
     <form novalidate @submit.stop.prevent="submit">
       <div class="form-flex-container">
         <div class="form-flex-container--field">
-          <md-input-container >
+          <md-input-container :class="{'md-input-invalid': errors.has('email')}">
             <label>Email</label>
-            <md-input required type="email" v-model="userEmail"></md-input>
+            <md-input type="email" v-model="userEmail" data-vv-name="email" v-validate name="email" data-vv-rules="required|email"></md-input>
             <span class="md-error">A valid email address is required</span>
           </md-input-container>
         </div>
         <div class="form-flex-container--field">
-          <md-input-container>
+          <md-input-container :class="{'md-input-invalid': errors.has('password')}" mdHasPassword>
             <label>Password</label>
-            <md-input required type="password" v-model="userPassword"></md-input>
+            <md-input type="password" v-model="userPassword" data-vv-name="password" v-validate name="password" data-vv-rules="required"></md-input>
             <span class="md-error">Password is required</span>
           </md-input-container>
         </div>

@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import VueMaterial from 'vue-material';
+import VeeValidate from 'vee-validate';
 import 'vue-material/dist/vue-material.css'
 
 import App from './App'
@@ -9,6 +10,7 @@ import router from './router'
 
 Vue.config.productionTip = false
 Vue.use(VueMaterial);
+Vue.use(VeeValidate);
 Vue.material.registerTheme('default', {
   primary: 'blue-grey',
   accent: 'red'
