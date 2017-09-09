@@ -1,0 +1,81 @@
+<template>
+  <div>
+    <h1 class="md-title">Please login to use this service</h1>
+    <form novalidate @submit.stop.prevent="submit">
+      <div class="form-flex-container">
+        <div class="form-flex-container--field">
+          <md-input-container >
+            <label>Email</label>
+            <md-input required type="email" v-model="userEmail"></md-input>
+            <span class="md-error">A valid email address is required</span>
+          </md-input-container>
+        </div>
+        <div class="form-flex-container--field">
+          <md-input-container>
+            <label>Password</label>
+            <md-input required type="password" v-model="userPassword"></md-input>
+            <span class="md-error">Password is required</span>
+          </md-input-container>
+        </div>
+        <div class="form-flex-container--button">
+          <md-button class="md-raised md-accent">Submit</md-button>
+        </div>
+      </div>
+    </form>
+  </div>
+</template>
+<script>
+  import MdInputContainer from '../../node_modules/vue-material/src/components/mdInputContainer/mdInputContainer.vue';
+  import MdInput from '../../node_modules/vue-material/src/components/mdInputContainer/mdInput.vue';
+  import MdLayout from '../../node_modules/vue-material/src/components/mdLayout/mdLayout.vue';
+  import MdButton from '../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
+
+  export default {
+    components: {
+      MdButton,
+      MdLayout,
+      MdInput,
+      MdInputContainer
+    },
+    name: 'login',
+    data() {
+      return {
+        userEmail: '',
+        userPassword: ''
+      }
+    },
+    methods: {
+      submitForm(){
+
+      }
+    }
+  }
+</script>
+<style scoped lang="scss">
+  .form-flex-container {
+    display: flex;
+  }
+
+  @media all and (max-width: 500px) {
+    .form-flex-container {
+      flex-direction: column;
+    }
+    .form-flex-container--field {
+      width: 100%;
+      flex-direction: column;
+    }
+  }
+
+  @media all and (min-width: 500px) {
+    .form-flex-container {
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    .form-flex-container--field {
+      margin: 10px;
+      width: 40%;
+    }
+  }
+</style>
