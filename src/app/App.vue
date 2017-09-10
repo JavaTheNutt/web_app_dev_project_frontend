@@ -28,6 +28,10 @@
     <main>
       <router-view></router-view>
     </main>
+    <md-snackbar  ref="snackbar">
+      <span>{{snackMsg}}</span>
+      <md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>
+    </md-snackbar>
   </div>
 </template>
 
@@ -38,9 +42,12 @@
   import MdSidenav from '../../node_modules/vue-material/src/components/mdSidenav/mdSidenav.vue';
   import MdList from '../../node_modules/vue-material/src/components/mdList/mdList.vue';
   import MdListItem from '../../node_modules/vue-material/src/components/mdList/mdListItemButton.vue';
+  import bus from './services/bus';
+  import MdSnackbar from '../../node_modules/vue-material/src/components/mdSnackbar/mdSnackbar.vue';
 
   export default {
     components: {
+      MdSnackbar,
       MdListItem,
       MdList,
       MdSidenav,
@@ -65,6 +72,17 @@
       close(ref) {
         console.log('Closed: ' + ref);
       }
+    },
+    data(){
+      return {
+        snackMsg: ''
+      }
+    },
+    created(){
+      bus.$on('showSnack', (message)=>{
+        this.snackMsg = message;
+        this.$refs.snackbar.open();
+      })
     }
   }
 </script>

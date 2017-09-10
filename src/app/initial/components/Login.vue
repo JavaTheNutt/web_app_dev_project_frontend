@@ -25,6 +25,10 @@
         </div>
       </div>
     </form>
+    <md-snackbar  ref="snackbar">
+      <span>{{snackMsg}}</span>
+      <md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>
+    </md-snackbar>
   </div>
 </template>
 <script>
@@ -33,9 +37,12 @@
   import MdLayout from '../../../../node_modules/vue-material/src/components/mdLayout/mdLayout.vue';
   import MdButton from '../../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
   import * as firebase from '../service/firebase';
+  import MdSnackbar from '../../../../node_modules/vue-material/src/components/mdSnackbar/mdSnackbar.vue';
+  import bus from '../../services/bus';
 
   export default {
     components: {
+      MdSnackbar,
       MdButton,
       MdLayout,
       MdInput,
@@ -45,7 +52,11 @@
     data() {
       return {
         userEmail: '',
-        userPassword: ''
+        userPassword: '',
+        vertical: 'bottom',
+        horizontal: 'center',
+        duration: 4000,
+        snackMsg: 'form is invalid'
       }
     },
     methods: {
@@ -54,14 +65,20 @@
         // noinspection JSCheckFunctionSignatures
         if (!await this.$validator.validateAll()) {
           this.$log.debug('form not valid');
+          bus.$emit('showSnack', 'form is not valid');
           return;
         }
         this.$log.debug('form submitted');
         if (await firebase.login(this.userEmail, this.userPassword)) {
           this.$log.debug('login successful in component');
+          this.snackMsg = 'login successful';
+          //this.$refs.snackbar.open();
+          bus.$emit('showSnack', 'login successful');
+          this.$router.push('/');
           return;
         }
-        this.$log.debug('login successful in component');
+        this.$log.debug('login failed in component');
+        bus.$emit('showSnack', 'login failed');
       }
     }
   }
