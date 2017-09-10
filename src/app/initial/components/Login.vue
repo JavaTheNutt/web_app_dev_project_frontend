@@ -25,10 +25,6 @@
         </div>
       </div>
     </form>
-    <md-snackbar  ref="snackbar">
-      <span>{{snackMsg}}</span>
-      <md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>
-    </md-snackbar>
   </div>
 </template>
 <script>
@@ -37,12 +33,11 @@
   import MdLayout from '../../../../node_modules/vue-material/src/components/mdLayout/mdLayout.vue';
   import MdButton from '../../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
   import * as firebase from '../service/firebase';
-  import MdSnackbar from '../../../../node_modules/vue-material/src/components/mdSnackbar/mdSnackbar.vue';
   import bus from '../../services/bus';
+  import * as Logger from 'loglevel';
 
   export default {
     components: {
-      MdSnackbar,
       MdButton,
       MdLayout,
       MdInput,
@@ -52,34 +47,49 @@
     data() {
       return {
         userEmail: '',
-        userPassword: '',
-        vertical: 'bottom',
-        horizontal: 'center',
-        duration: 4000,
-        snackMsg: 'form is invalid'
+        userPassword: ''
       }
     },
     methods: {
       async submitForm() {
-        this.$log.debug('submit form clicked');
+        Logger.info('submit form clicked');
         // noinspection JSCheckFunctionSignatures
         if (!await this.$validator.validateAll()) {
-          this.$log.debug('form not valid');
+          Logger.info(`form not valid`);
           bus.$emit('showSnack', 'form is not valid');
           return;
         }
         this.$log.debug('form submitted');
-        if (await firebase.login(this.userEmail, this.userPassword)) {
-          this.$log.debug('login successful in component');
-          this.snackMsg = 'login successful';
-          //this.$refs.snackbar.open();
-          bus.$emit('showSnack', 'login successful');
-          this.$router.push('/');
+        if (!await firebase.login(this.userEmail, this.userPassword)) {
+          Logger.info(`login failed in component`);
+          bus.$emit('showSnack', 'login failed');
           return;
         }
-        this.$log.debug('login failed in component');
-        bus.$emit('showSnack', 'login failed');
+        Logger.info('login successful in component');
+        bus.$emit('showSnack', 'login successful');
+        let userGroup;
+        try {
+          userGroup = await this.$http.get('http://localhost:3000/login/firebase', {
+            headers: {
+              authProvider: 'firebase',
+              token: await firebase.getToken()
+            }
+          })
+
+        } catch (err) {
+          Logger.error(`error fetching data, ${err}`);
+          return;
+        }
+        Logger.info(`success!! ${JSON.stringify(userGroup)}`);
+        this.$router.push('/');
       }
+    },
+    mounted(){
+      if(!navigator.onLine){
+        bus.$emit('connection_lost');
+        Logger.info(`no internet connection`);
+      }
+      Logger.info(`login mounted`);
     }
   }
 </script>

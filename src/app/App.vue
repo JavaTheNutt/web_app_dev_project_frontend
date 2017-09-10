@@ -7,6 +7,10 @@
         </md-button>
         <h2 class="md-title">Home Resource Planner</h2>
       </md-toolbar>
+      <md-toolbar class="md-dense internet-status-box" v-if="noConnection">
+        <h2 class="md-subtitle">You are not connected to the internet</h2>
+      </md-toolbar>
+      <md-card></md-card>
       <md-sidenav class="md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')">
         <md-toolbar class="md-small">
           <div class="md-toolbar-container">
@@ -44,9 +48,14 @@
   import MdListItem from '../../node_modules/vue-material/src/components/mdList/mdListItemButton.vue';
   import bus from './services/bus';
   import MdSnackbar from '../../node_modules/vue-material/src/components/mdSnackbar/mdSnackbar.vue';
+  import * as Logger from 'loglevel';
+  import MdCard from '../../node_modules/vue-material/src/components/mdCard/mdCard.vue';
+
+
 
   export default {
     components: {
+      MdCard,
       MdSnackbar,
       MdListItem,
       MdList,
@@ -60,22 +69,17 @@
       toggleLeftSidenav() {
         this.$refs.leftSidenav.toggle();
       },
-      toggleRightSidenav() {
-        this.$refs.rightSidenav.toggle();
-      },
-      closeRightSidenav() {
-        this.$refs.rightSidenav.close();
-      },
       open(ref) {
-        console.log('Opened: ' + ref);
+        Logger.info(`Opened: ${ref}`);
       },
       close(ref) {
-        console.log('Closed: ' + ref);
+        Logger.info(`Closed: ${ref}`);
       }
     },
     data(){
       return {
-        snackMsg: ''
+        snackMsg: '',
+        noConnection: false
       }
     },
     created(){
@@ -83,6 +87,18 @@
         this.snackMsg = message;
         this.$refs.snackbar.open();
       })
+    },
+    mounted(){
+      Logger.info(`main app mounted`);
+      this.noConnection = !navigator.onLine;
+      window.addEventListener('online', function () {
+        Logger.info(`online status changed to up`);
+        this.noConnection = false;
+      });
+      window.addEventListener('offline', function () {
+        Logger.info(`online status changed to down`);
+        this.noConnection = true;
+      });
     }
   }
 </script>
@@ -96,6 +112,10 @@
     margin: 0;
   }
 
+  .internet-status-box{
+    background-color: darkgray;
+    color: black;
+  }
   #app {
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
