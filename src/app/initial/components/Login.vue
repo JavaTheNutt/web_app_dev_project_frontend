@@ -32,7 +32,7 @@
   import MdInput from '../../../../node_modules/vue-material/src/components/mdInputContainer/mdInput.vue';
   import MdLayout from '../../../../node_modules/vue-material/src/components/mdLayout/mdLayout.vue';
   import MdButton from '../../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
-  import firebase from 'firebase';
+  import * as firebase from '../service/firebase';
 
   export default {
     components: {
@@ -57,13 +57,11 @@
           return;
         }
         this.$log.debug('form submitted');
-        try {
-          this.$log.debug('attempting to login with firebase');
-          await firebase.auth().signInWithEmailAndPassword(this.userEmail, this.userPassword);
-          this.$log.debug('login succeeded', JSON.stringify(firebase.auth().currentUser));
-        } catch (err) {
-          this.$log.error('login failed', err);
+        if (await firebase.login(this.userEmail, this.userPassword)) {
+          this.$log.debug('login successful in component');
+          return;
         }
+        this.$log.debug('login successful in component');
       }
     }
   }
