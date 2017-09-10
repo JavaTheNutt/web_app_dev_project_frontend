@@ -14,10 +14,16 @@
           </div>
         </md-toolbar>
         <md-list>
-          <md-list-item><router-link exact to="/" class="sideNavListItem" @click.native="$refs.leftSidenav.close()">Home</router-link></md-list-item>
-          <md-list-item><router-link exact to="/login" class="sideNavListItem" @click.native="$refs.leftSidenav.close()">Login</router-link></md-list-item>
+          <md-list-item>
+            <router-link exact to="/" class="sideNavListItem" @click.native="$refs.leftSidenav.close()">Home
+            </router-link>
+          </md-list-item>
+          <md-list-item>
+            <router-link exact to="/login" class="sideNavListItem" @click.native="$refs.leftSidenav.close()">Login
+            </router-link>
+          </md-list-item>
         </md-list>
-        </md-sidenav>
+      </md-sidenav>
     </div>
     <main>
       <router-view></router-view>
@@ -80,9 +86,10 @@
     overflow-x: hidden;
   }
 
-  .sideNavListItem{
+  .sideNavListItem {
     z-index: 101;
   }
+
   main {
     text-align: center;
     //margin-top: 40px;

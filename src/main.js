@@ -8,10 +8,16 @@ import 'vue-material/dist/vue-material.css'
 import {App} from './app'
 import router from './router'
 import store from './store';
+import Logger from './util/Logger'
+import privateConfig from '../config/private';
+import firebase from 'firebase';
+
+firebase.initializeApp(privateConfig.firebase);
 
 Vue.config.productionTip = false;
 Vue.use(VueMaterial);
 Vue.use(VeeValidate);
+Vue.use(Logger);
 Vue.material.registerTheme('default', {
   primary: 'blue-grey',
   accent: 'red'
@@ -22,5 +28,5 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: {App}
 });

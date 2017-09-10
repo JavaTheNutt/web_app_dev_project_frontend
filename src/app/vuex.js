@@ -1,3 +1,3 @@
-import { vuex as initial } from './Initial';
+import {vuex as initial} from './initial';
 
-export default { initial };
+export default {initial};

@@ -1,11 +1,11 @@
 import * as actions from './actions';
 import mutations from './mutations';
 
-  const state = {
-    something: {}
+const state = {
+  something: {}
 };
 
-  export default {
+export default {
   state,
   actions,
   mutations
