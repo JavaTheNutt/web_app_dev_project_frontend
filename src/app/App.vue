@@ -26,12 +26,12 @@
 </template>
 
 <script>
-  import MdToolbar from '../node_modules/vue-material/src/components/mdToolbar/mdToolbar.vue';
-  import MdButton from '../node_modules/vue-material/src/components/mdButton/mdButton.vue';
-  import MdIcon from '../node_modules/vue-material/src/components/mdIcon/mdIcon.vue';
-  import MdSidenav from '../node_modules/vue-material/src/components/mdSidenav/mdSidenav.vue';
-  import MdList from '../node_modules/vue-material/src/components/mdList/mdList.vue';
-  import MdListItem from '../node_modules/vue-material/src/components/mdList/mdListItemButton.vue';
+  import MdToolbar from '../../node_modules/vue-material/src/components/mdToolbar/mdToolbar.vue';
+  import MdButton from '../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
+  import MdIcon from '../../node_modules/vue-material/src/components/mdIcon/mdIcon.vue';
+  import MdSidenav from '../../node_modules/vue-material/src/components/mdSidenav/mdSidenav.vue';
+  import MdList from '../../node_modules/vue-material/src/components/mdList/mdList.vue';
+  import MdListItem from '../../node_modules/vue-material/src/components/mdList/mdListItemButton.vue';
 
   export default {
     components: {
@@ -66,7 +66,7 @@
 <style lang="scss">
   @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic");
   @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-  @import "styles/variables.scss";
+  @import "../styles/variables";
 
   body {
     margin: 0;

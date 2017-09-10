@@ -25,10 +25,10 @@
   </div>
 </template>
 <script>
-  import MdInputContainer from '../../node_modules/vue-material/src/components/mdInputContainer/mdInputContainer.vue';
-  import MdInput from '../../node_modules/vue-material/src/components/mdInputContainer/mdInput.vue';
-  import MdLayout from '../../node_modules/vue-material/src/components/mdLayout/mdLayout.vue';
-  import MdButton from '../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
+  import MdInputContainer from '../../../../node_modules/vue-material/src/components/mdInputContainer/mdInputContainer.vue';
+  import MdInput from '../../../../node_modules/vue-material/src/components/mdInputContainer/mdInput.vue';
+  import MdLayout from '../../../../node_modules/vue-material/src/components/mdLayout/mdLayout.vue';
+  import MdButton from '../../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
 
   export default {
     components: {
