@@ -4,9 +4,20 @@ export const login = async function (username, email) {
   try {
     Logger.info('login service called');
     await firebase.auth().signInWithEmailAndPassword(username, email);
-    return true;
-  } catch (e) {
     return false;
+  } catch (e) {
+    Logger.warn(`there was an error while authenticating: ${e}`);
+    switch(e.code){
+      case 'auth/user-not-found':
+        return 'Email is not registered on the system';
+        break;
+      case 'auth/wrong-password':
+        return 'Password is incorrect';
+        break;
+      default:
+        return 'An unknown error has occurred '
+    }
+    //return false;
   }
 };
 

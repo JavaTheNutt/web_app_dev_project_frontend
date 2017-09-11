@@ -8,7 +8,7 @@
           <md-input-container :class="{'md-input-invalid': errors.has('email')}">
             <label>Email</label>
             <md-input type="email" v-model="userEmail" data-vv-name="email" v-validate name="email"
-                      data-vv-rules="required|email"></md-input>
+                      data-vv-rules="required|email" ref="emailField"></md-input>
             <span class="md-error">A valid email address is required</span>
           </md-input-container>
         </div>
@@ -16,7 +16,7 @@
           <md-input-container :class="{'md-input-invalid': errors.has('password')}" mdHasPassword>
             <label>Password</label>
             <md-input type="password" v-model="userPassword" data-vv-name="password" v-validate name="password"
-                      data-vv-rules="required"></md-input>
+                      data-vv-rules="required" ref="passwordField"></md-input>
             <span class="md-error">Password is required</span>
           </md-input-container>
         </div>
@@ -59,25 +59,25 @@
           bus.$emit('showSnack', 'form is not valid');
           return;
         }
-        this.$log.debug('form submitted');
-        if (!await firebase.login(this.userEmail, this.userPassword)) {
-          Logger.info(`login failed in component`);
-          bus.$emit('showSnack', 'login failed');
+        Logger.info(`form is valid`);
+        const firebaseError = await firebase.login(this.userEmail, this.userPassword);
+        if (firebaseError) {
+          Logger.info(`login failed in component while communicating with the auth server`);
+          bus.$emit('showSnack', firebaseError);
           return;
         }
-        Logger.info('login successful in component');
-        bus.$emit('showSnack', 'login successful');
+        Logger.info('auth server login successfull');
         let userGroup;
         try {
+          //fixme better error display
           userGroup = await this.$http.get('http://localhost:3000/login/firebase', {
             headers: {
               authProvider: 'firebase',
               token: await firebase.getToken()
             }
-          })
-
+          });
         } catch (err) {
-          Logger.error(`error fetching data, ${err}`);
+          Logger.error(`error fetching data, ${JSON.stringify(err)}`);
           return;
         }
         Logger.info(`success!! ${JSON.stringify(userGroup)}`);

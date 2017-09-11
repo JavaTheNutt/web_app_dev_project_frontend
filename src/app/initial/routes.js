@@ -8,4 +8,8 @@ export default [{
   path: '/login',
   name: 'login',
   component: components.Login
+},{
+  path:'/signup',
+  name: 'signup',
+  component: components.Signup
 }]

@@ -26,6 +26,10 @@
             <router-link exact to="/login" class="sideNavListItem" @click.native="$refs.leftSidenav.close()">Login
             </router-link>
           </md-list-item>
+          <md-list-item>
+            <router-link exact to="/signup" class="sideNavListItem" @click.native="$refs.leftSidenav.close()">Signup
+            </router-link>
+          </md-list-item>
         </md-list>
       </md-sidenav>
     </div>
@@ -108,6 +112,11 @@
   @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
   @import "../styles/variables";
 
+  /*required to remove chrome yellow fill on autofilled fields
+  found: https://github.com/angular/material/issues/2260*/
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+  }
   body {
     margin: 0;
   }

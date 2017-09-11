@@ -9,7 +9,6 @@ import 'vue-material/dist/vue-material.css'
 import {App} from './app'
 import router from './router'
 import store from './store';
-import Logger from './util/Logger'
 import privateConfig from '../config/private';
 import firebase from 'firebase';
 import * as log from 'loglevel';
@@ -24,7 +23,7 @@ firebase.initializeApp(privateConfig.firebase);
 Vue.config.productionTip = false;
 Vue.use(VueMaterial);
 Vue.use(VeeValidate);
-Vue.use(Logger);
+
 Vue.use(VueResource);
 Vue.material.registerTheme('default', {
   primary: 'blue-grey',
