@@ -32,13 +32,13 @@
         </md-input-container>
         <md-input-container :class="{'md-input-invalid': errors.has('password')}" mdHasPassword>
           <label>Password</label>
-          <md-input type="text" v-model="password" data-vv-name="password" name="password" v-validate="'required|min:6'"
+          <md-input type="password" v-model="password" data-vv-name="password" name="password" v-validate="'required|min:6'"
           ></md-input>
           <span class="md-error">Password must be at least 6 characters</span>
         </md-input-container>
         <md-input-container :class="{'md-input-invalid': errors.has('confirmPassword')}" mdHasPassword>
           <label>Password</label>
-          <md-input type="text" v-model="confirmPassword" data-vv-name="confirmPassword" name="confirmPassword"
+          <md-input type="password" v-model="confirmPassword" data-vv-name="confirmPassword" name="confirmPassword"
                     v-validate="'required|confirmed:password'"
           ></md-input>
           <span class="md-error">Passwords must match</span>
@@ -57,6 +57,8 @@
   import MdLayout from '../../../../node_modules/vue-material/src/components/mdLayout/mdLayout.vue';
   import MdButton from '../../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
   import {Validator} from 'vee-validate';
+  import bus from '../../services/bus';
+  import * as firebase from '../service/firebase';
 
   export default {
     components: {
@@ -78,7 +80,16 @@
     },
     methods: {
       async submitForm() {
-        await this.$validator.validateAll();
+        if(!await this.$validator.validateAll()){
+          bus.$emit('showSnack', 'Please ensure the form is correctly filled in');
+          return;
+        }
+        let firebaseErrorMessge = await firebase.signUp(this.email, this.password);
+        if(firebaseErrorMessge){
+          bus.$emit('showSnack', firebaseErrorMessge);
+          return;
+        }
+
       },
       resetForm() {
         //found at: https://stackoverflow.com/a/40856312/4108556
