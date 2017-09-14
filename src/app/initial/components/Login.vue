@@ -52,9 +52,7 @@
       }
     },
     methods: {
-      mapActions(){
-        'a_logInUser'
-      },
+
       async submitForm() {
         Logger.info('submit form clicked');
         // noinspection JSCheckFunctionSignatures
@@ -71,21 +69,6 @@
           return;
         }
         this.$store.dispatch('a_logInUser', {email: this.userEmail,password: this.userPassword});
-        /*Logger.info('auth server login successfull');
-        let userGroup;
-        try {
-          //fixme better error display
-          userGroup = await this.$http.get('http://localhost:3000/login/firebase', {
-            headers: {
-              authProvider: 'firebase',
-              token: await firebase.getToken()
-            }
-          });
-        } catch (err) {
-          Logger.error(`error fetching data, ${JSON.stringify(err)}`);
-          return;
-        }
-        Logger.info(`success!! ${JSON.stringify(userGroup)}`);*/
         this.$router.push('/');
       }
     },

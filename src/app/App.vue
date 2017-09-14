@@ -1,99 +1,51 @@
 <template>
   <div id="app">
     <div class="phone-viewport">
-      <md-toolbar>
-        <md-button class="md-icon-button" @click="toggleLeftSidenav">
-          <md-icon>menu</md-icon>
-        </md-button>
-        <h2 class="md-title" style="flex:1">Home Resource Planner</h2>
-        <md-button class="md-raised md-accent" @click.native="goLogin">Login</md-button>
-      </md-toolbar>
-      <md-toolbar class="md-dense internet-status-box" v-if="noConnection">
-        <h2 class="md-subtitle">You are not connected to the internet</h2>
-      </md-toolbar>
-      <md-card></md-card>
-      <md-sidenav class="md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')">
-        <md-toolbar class="md-small">
-          <div class="md-toolbar-container">
-            <h3 class="md-subtitle">Navigation</h3>
-          </div>
-        </md-toolbar>
-        <md-list>
-          <md-list-item>
-            <router-link exact to="/" class="sideNavListItem" @click.native="$refs.leftSidenav.close()">Home
-            </router-link>
-          </md-list-item>
-          <md-list-item>
-            <router-link exact to="/signup" class="sideNavListItem" @click.native="$refs.leftSidenav.close()">Signup
-            </router-link>
-          </md-list-item>
-        </md-list>
-      </md-sidenav>
+      <navigation></navigation>
     </div>
     <main>
       <router-view></router-view>
     </main>
-    <md-snackbar  ref="snackbar">
+    <md-snackbar ref="snackbar">
       <span>{{snackMsg}}</span>
       <md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>
     </md-snackbar>
+
   </div>
 </template>
 
 <script>
-  import MdToolbar from '../../node_modules/vue-material/src/components/mdToolbar/mdToolbar.vue';
   import MdButton from '../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
-  import MdIcon from '../../node_modules/vue-material/src/components/mdIcon/mdIcon.vue';
-  import MdSidenav from '../../node_modules/vue-material/src/components/mdSidenav/mdSidenav.vue';
-  import MdList from '../../node_modules/vue-material/src/components/mdList/mdList.vue';
-  import MdListItem from '../../node_modules/vue-material/src/components/mdList/mdListItemButton.vue';
   import bus from './services/bus';
-  import MdSnackbar from '../../node_modules/vue-material/src/components/mdSnackbar/mdSnackbar.vue';
   import * as Logger from 'loglevel';
-  import MdCard from '../../node_modules/vue-material/src/components/mdCard/mdCard.vue';
-
-
+  import {mapState} from 'vuex';
+  import Navigation from './components/Nav';
 
   export default {
     components: {
-      MdCard,
-      MdSnackbar,
-      MdListItem,
-      MdList,
-      MdSidenav,
-      MdIcon,
-      MdButton,
-      MdToolbar
+      Navigation
     },
     name: 'app',
     methods: {
-      toggleLeftSidenav() {
-        this.$refs.leftSidenav.toggle();
-      },
-      open(ref) {
-        Logger.info(`Opened: ${ref}`);
-      },
-      close(ref) {
-        Logger.info(`Closed: ${ref}`);
-      },
-      goLogin(){
-        this.$router.push('/login')
-      }
+
     },
-    data(){
+    /*computed: mapState(['loggedIn']),*/
+    data() {
       return {
         snackMsg: '',
         noConnection: false,
         loginText: 'Login'
       }
     },
-    created(){
-      bus.$on('showSnack', (message)=>{
+    created() {
+      bus.$on('showSnack', (message) => {
         this.snackMsg = message;
         this.$refs.snackbar.open();
       })
     },
-    mounted(){
+    mounted() {
+      //todo listen for auth change events, to update the ui accordingly
+      //this.$refs.noInternetMsg.open();
       Logger.info(`main app mounted`);
       this.noConnection = !navigator.onLine;
       window.addEventListener('online', function () {
@@ -118,14 +70,16 @@
   input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px white inset;
   }
+
   body {
     margin: 0;
   }
 
-  .internet-status-box{
+  .internet-status-box {
     background-color: darkgray;
     color: black;
   }
+
   #app {
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -134,10 +88,11 @@
     overflow-x: hidden;
   }
 
-  .nav-spacer{
+  .nav-spacer {
     flex: 1;
     width: 100%;
   }
+
   .sideNavListItem {
     z-index: 101;
   }
