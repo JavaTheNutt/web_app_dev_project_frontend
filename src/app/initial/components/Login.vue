@@ -35,6 +35,7 @@
   import * as firebase from '../service/firebase';
   import bus from '../../services/bus';
   import * as Logger from 'loglevel';
+  import {mapActions} from 'vuex';
 
   export default {
     components: {
@@ -51,6 +52,9 @@
       }
     },
     methods: {
+      mapActions(){
+        'a_logInUser'
+      },
       async submitForm() {
         Logger.info('submit form clicked');
         // noinspection JSCheckFunctionSignatures
@@ -66,7 +70,8 @@
           bus.$emit('showSnack', firebaseError);
           return;
         }
-        Logger.info('auth server login successfull');
+        this.$store.dispatch('a_logInUser', {email: this.userEmail,password: this.userPassword});
+        /*Logger.info('auth server login successfull');
         let userGroup;
         try {
           //fixme better error display
@@ -80,7 +85,7 @@
           Logger.error(`error fetching data, ${JSON.stringify(err)}`);
           return;
         }
-        Logger.info(`success!! ${JSON.stringify(userGroup)}`);
+        Logger.info(`success!! ${JSON.stringify(userGroup)}`);*/
         this.$router.push('/');
       }
     },

@@ -37,7 +37,7 @@
           <span class="md-error">Password must be at least 6 characters</span>
         </md-input-container>
         <md-input-container :class="{'md-input-invalid': errors.has('confirmPassword')}" mdHasPassword>
-          <label>Password</label>
+          <label>Confirm Password</label>
           <md-input type="password" v-model="confirmPassword" data-vv-name="confirmPassword" name="confirmPassword"
                     v-validate="'required|confirmed:password'"
           ></md-input>

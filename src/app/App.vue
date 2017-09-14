@@ -5,7 +5,8 @@
         <md-button class="md-icon-button" @click="toggleLeftSidenav">
           <md-icon>menu</md-icon>
         </md-button>
-        <h2 class="md-title">Home Resource Planner</h2>
+        <h2 class="md-title" style="flex:1">Home Resource Planner</h2>
+        <md-button class="md-raised md-accent" @click.native="goLogin">Login</md-button>
       </md-toolbar>
       <md-toolbar class="md-dense internet-status-box" v-if="noConnection">
         <h2 class="md-subtitle">You are not connected to the internet</h2>
@@ -20,10 +21,6 @@
         <md-list>
           <md-list-item>
             <router-link exact to="/" class="sideNavListItem" @click.native="$refs.leftSidenav.close()">Home
-            </router-link>
-          </md-list-item>
-          <md-list-item>
-            <router-link exact to="/login" class="sideNavListItem" @click.native="$refs.leftSidenav.close()">Login
             </router-link>
           </md-list-item>
           <md-list-item>
@@ -78,12 +75,16 @@
       },
       close(ref) {
         Logger.info(`Closed: ${ref}`);
+      },
+      goLogin(){
+        this.$router.push('/login')
       }
     },
     data(){
       return {
         snackMsg: '',
-        noConnection: false
+        noConnection: false,
+        loginText: 'Login'
       }
     },
     created(){
@@ -133,6 +134,10 @@
     overflow-x: hidden;
   }
 
+  .nav-spacer{
+    flex: 1;
+    width: 100%;
+  }
   .sideNavListItem {
     z-index: 101;
   }

@@ -33,6 +33,7 @@ export const signUp = async function(username, password){
     await firebase.auth().createUserWithEmailAndPassword(username, password);
     return false;
   }catch(err){
+    Logger.warn(`error creating firebase account`);
     switch(err.code){
       case 'auth/email-already-in-use':
         return 'The specified email address is already in use';
