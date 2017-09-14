@@ -20,11 +20,12 @@ export const a_testCurrentAuthState = ({commit}) => {
   const currentUser = firebase.auth().currentUser;
   if (currentUser) {
     Logger.info(`user logged in`);
-    return commit('m_logInUser', {data: currentUser});
+    return commit('m_logInUser');
   }
   Logger.info(`user not logged in`);
   return commit('m_logOutUser');
 };
+
 export const a_logOutUser           = async ({dispatch}) => {
   Logger.info(`request received to log out user`);
   try {

@@ -5,7 +5,7 @@
         <md-icon>menu</md-icon>
       </md-button>
       <h2 class="md-title" style="flex:1">Home Resource Planner</h2>
-      <md-button class="md-raised md-accent" @click.native="goLogin">Login</md-button>
+      <md-button class="md-raised md-accent" @click.native="goLogin" v-if="!loggedIn">Login</md-button>
     </md-toolbar>
     <md-card></md-card>
     <md-sidenav class="md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')">
@@ -18,10 +18,10 @@
         <md-list-item @click.native="$refs.leftSidenav.close();redirect('/')" class="side-nav--list-item">
           <p class="side-nav--link">Home</p>
         </md-list-item>
-        <md-list-item @click.native="$refs.leftSidenav.close();redirect('/signup')">
+        <md-list-item @click.native="$refs.leftSidenav.close();redirect('/signup')" v-if="!loggedIn">
           <p class="side-nav--link">Signup</p>
         </md-list-item>
-        <md-list-item @click.native="$refs.leftSidenav.close();triggerLogOut()">
+        <md-list-item @click.native="$refs.leftSidenav.close();triggerLogOut()" v-if="loggedIn">
           <p class="side-nav--link">Logout</p>
         </md-list-item>
       </md-list>
@@ -30,13 +30,20 @@
 </template>
 <script>
   import * as Logger from 'loglevel';
-  import {mapState} from 'vuex';
+  import {mapState, mapGetters} from 'vuex';
   //fixme need to fix link styling in side nav bar
   export default {
     name: 'navigation',
-   /* computed:{
-      loggedIn(){return this.$store.state.loggedIn}
-    *//*},*/
+    //computed: mapState(['loggedIn']),
+    computed: {
+      ...mapGetters([
+        'loggedIn'
+      ])/*,
+
+      loggedIn(){
+        return this.$store.getters.loggedIn
+      }*/
+    },
     methods: {
       toggleLeftSidenav() {
         this.$refs.leftSidenav.toggle();
@@ -62,10 +69,11 @@
   }
 </script>
 <style scoped lang="scss">
-  .side-nav--link{
+  .side-nav--link {
     cursor: default;
   }
-  .side-nav--list-item{
+
+  .side-nav--list-item {
     cursor: pointer;
   }
 </style>

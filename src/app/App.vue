@@ -20,6 +20,7 @@
   import * as Logger from 'loglevel';
   import {mapState} from 'vuex';
   import Navigation from './components/Nav';
+  //import * as firebaseService from './services/firebase';
 
   export default {
     components: {
@@ -29,7 +30,6 @@
     methods: {
 
     },
-    /*computed: mapState(['loggedIn']),*/
     data() {
       return {
         snackMsg: '',
