@@ -89,9 +89,13 @@ var webpackConfig = merge(baseWebpackConfig, {
       runtimeCaching: [{
         urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
         handler: 'cacheFirst'
+      },{
+        urlPattern: /https:\/\/fonts\.gstatic\.com\//,
+        handler: 'cacheFirst'
+
       }]
     })]
-})
+});
 
 if (config.build.productionGzip) {
   var CompressionWebpackPlugin = require('compression-webpack-plugin')

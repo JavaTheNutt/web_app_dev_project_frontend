@@ -12,6 +12,8 @@ import store from './store';
 import privateConfig from '../config/private';
 import firebase from 'firebase';
 import * as log from 'loglevel';
+
+require('../node_modules/vue-material/dist/vue-material.css');
 if(process.env.NODE_ENV === 'production'){
   log.setLevel('silent');
 }else{

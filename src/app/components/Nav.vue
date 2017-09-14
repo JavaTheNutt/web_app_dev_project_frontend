@@ -34,15 +34,10 @@
   //fixme need to fix link styling in side nav bar
   export default {
     name: 'navigation',
-    //computed: mapState(['loggedIn']),
     computed: {
       ...mapGetters([
         'loggedIn'
-      ])/*,
-
-      loggedIn(){
-        return this.$store.getters.loggedIn
-      }*/
+      ])
     },
     methods: {
       toggleLeftSidenav() {

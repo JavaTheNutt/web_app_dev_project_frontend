@@ -10,7 +10,10 @@
       <span>{{snackMsg}}</span>
       <md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>
     </md-snackbar>
-
+    <md-snackbar ref="noConnectionMessage" :md-duration="Infinity" v-if="noConnection">
+      <span>You are not connected to the internet. Some features may be unavailable</span>
+      <md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>
+    </md-snackbar>
   </div>
 </template>
 
