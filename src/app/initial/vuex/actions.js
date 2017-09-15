@@ -18,6 +18,7 @@ export const a_logInUser            =  async ({dispatch}, user) => {
 export const a_testCurrentAuthState = ({commit}) => {
   Logger.info(`testing current login state`);
   const currentUser = firebase.auth().currentUser;
+  Logger.info(`current user: ${JSON.stringify(currentUser)}`);
   if (currentUser) {
     Logger.info(`user logged in`);
     return commit('m_logInUser');

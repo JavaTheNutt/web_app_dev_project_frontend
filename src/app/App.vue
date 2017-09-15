@@ -10,10 +10,10 @@
       <span>{{snackMsg}}</span>
       <md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>
     </md-snackbar>
-    <md-snackbar ref="noConnectionMessage" :md-duration="Infinity" v-if="noConnection">
+    <!--<md-snackbar ref="noConnectionMessage" :md-duration="Infinity" v-if="noConnection">
       <span>You are not connected to the internet. Some features may be unavailable</span>
       <md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>
-    </md-snackbar>
+    </md-snackbar>-->
   </div>
 </template>
 
@@ -59,6 +59,12 @@
         Logger.info(`online status changed to down`);
         this.noConnection = true;
       });
+      setTimeout(() =>{
+        this.$store.dispatch('a_testCurrentAuthState');
+      }, 50);
+      /*process.nextTick(()=>{
+        this.$store.dispatch('a_testCurrentAuthState');
+      })*/
     }
   }
 </script>
