@@ -34,8 +34,6 @@
     data() {
       return {
         snackMsg: '',
-        noConnection: false,
-        isOnline: navigator.onLine
       }
     },
     created() {
@@ -46,7 +44,7 @@
     },
     mounted() {
       Logger.info(`main app mounted`);
-      window.addEventListener('online', function () {
+      /*window.addEventListener('online', function () {
         Logger.info(`online status changed to up`);
         this.$refs.noConnectionMessage.open();
         this.isOnline = true
@@ -55,9 +53,10 @@
         Logger.info(`online status changed to down`);
         this.$refs.noConnectionMessage.close();
         this.isOnline = false;
-      });
-      /*When the main app is mounted, attach a firebase listener*/
+      });*/
+      /*When the main app is mounted, attach a firebase listener, and a connection state listener*/
       this.$store.dispatch('a_setAuthStateListener');
+      this.$store.dispatch('a_attachOnlineStateListeners');
     }
   }
 </script>
