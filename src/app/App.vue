@@ -10,10 +10,10 @@
       <span>{{snackMsg}}</span>
       <md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>
     </md-snackbar>
-    <!--<md-snackbar ref="noConnectionMessage" :md-duration="Infinity" v-if="noConnection">
+    <md-snackbar ref="noConnectionMessage" :md-duration="Infinity">
       <span>You are not connected to the internet. Some features may be unavailable</span>
-      <md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>
-    </md-snackbar>-->
+      <!--<md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>-->
+    </md-snackbar>
   </div>
 </template>
 
@@ -35,7 +35,7 @@
       return {
         snackMsg: '',
         noConnection: false,
-        loginText: 'Login'
+        isOnline: navigator.onLine
       }
     },
     created() {
@@ -45,30 +45,19 @@
       })
     },
     mounted() {
-      //todo listen for auth change events, to update the ui accordingly
-      //this.$refs.noInternetMsg.open();
       Logger.info(`main app mounted`);
-      this.noConnection = !navigator.onLine;
       window.addEventListener('online', function () {
         Logger.info(`online status changed to up`);
-        this.noConnection = false;
+        this.$refs.noConnectionMessage.open();
+        this.isOnline = true
       });
       window.addEventListener('offline', function () {
         Logger.info(`online status changed to down`);
-        this.noConnection = true;
+        this.$refs.noConnectionMessage.close();
+        this.isOnline = false;
       });
-
+      /*When the main app is mounted, attach a firebase listener*/
       this.$store.dispatch('a_setAuthStateListener');
-      //fixme: this creates a race event between the read of the firebase token from localStorage, and the setTimeout function
-      /*This created a race condition that meant auto login only sporadically worked*/
-      /*setTimeout(() => {
-        this.$store.dispatch('a_testCurrentAuthState');
-      }, 100);*/
-      /*
-      * This does not work, the token must not be read from localStorage by the next iteration of the event loop*/
-      /*process.nextTick(()=>{
-        this.$store.dispatch('a_testCurrentAuthState');
-      })*/
     }
   }
 </script>
