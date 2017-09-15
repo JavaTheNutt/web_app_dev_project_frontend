@@ -30,9 +30,7 @@
       Navigation
     },
     name: 'app',
-    methods: {
-
-    },
+    methods: {},
     data() {
       return {
         snackMsg: '',
@@ -59,9 +57,15 @@
         Logger.info(`online status changed to down`);
         this.noConnection = true;
       });
-      setTimeout(() =>{
+
+      this.$store.dispatch('a_setAuthStateListener');
+      //fixme: this creates a race event between the read of the firebase token from localStorage, and the setTimeout function
+      /*This created a race condition that meant auto login only sporadically worked*/
+      /*setTimeout(() => {
         this.$store.dispatch('a_testCurrentAuthState');
-      }, 50);
+      }, 100);*/
+      /*
+      * This does not work, the token must not be read from localStorage by the next iteration of the event loop*/
       /*process.nextTick(()=>{
         this.$store.dispatch('a_testCurrentAuthState');
       })*/

@@ -26,7 +26,11 @@ export const a_testCurrentAuthState = ({commit}) => {
   Logger.info(`user not logged in`);
   return commit('m_logOutUser');
 };
+export const a_setAuthStateListener = ({dispatch})=>{
+  Logger.info(`attempting to set auth state listener`);
+  firebase.auth().onAuthStateChanged((user)=>{Logger.info(`auth state change triggered`);dispatch('a_testCurrentAuthState')})
 
+};
 export const a_logOutUser           = async ({dispatch}) => {
   Logger.info(`request received to log out user`);
   try {
