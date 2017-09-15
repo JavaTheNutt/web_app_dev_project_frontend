@@ -1,3 +1,3 @@
 export default {
-  loggedIn: state => {return state.loggedIn}
+  something: state => {return state.something}
 }

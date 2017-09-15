@@ -1,3 +1,3 @@
 import {vuex as initial} from './initial';
-
-export default {initial};
+import {auth} from './store'
+export default {initial, auth};

@@ -1,8 +1,4 @@
 // noinspection JSUnusedGlobalSymbols
-export const a_action = ({commit})=>{
-  commit('m_something')
-}
-/*
 import * as Logger from 'loglevel';
 import firebase from 'firebase';
 import bus from '../../services/bus';
@@ -59,4 +55,3 @@ function handleFirebaseError(errCode) {
       return 'An unknown error has occurred '
   }
 }
-*/
