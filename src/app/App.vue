@@ -10,7 +10,7 @@
       <span>{{snackMsg}}</span>
       <md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>
     </md-snackbar>
-    <md-snackbar ref="noConnectionMessage" :md-duration="Infinity">
+    <md-snackbar ref="noConnectionMessage">
       <span>You are not connected to the internet. Some features may be unavailable</span>
       <!--<md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>-->
     </md-snackbar>
@@ -21,9 +21,8 @@
   import MdButton from '../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
   import bus from './services/bus';
   import * as Logger from 'loglevel';
-  import {mapState} from 'vuex';
+  import {mapGetters} from 'vuex';
   import Navigation from './components/Nav';
-  //import * as firebaseService from './services/firebase';
 
   export default {
     components: {
@@ -36,25 +35,17 @@
         snackMsg: '',
       }
     },
+    computed:{
+      ...mapGetters(['getConnection'])
+    },
     created() {
       bus.$on('showSnack', (message) => {
         this.snackMsg = message;
         this.$refs.snackbar.open();
-      })
+      });
     },
     mounted() {
       Logger.info(`main app mounted`);
-      /*window.addEventListener('online', function () {
-        Logger.info(`online status changed to up`);
-        this.$refs.noConnectionMessage.open();
-        this.isOnline = true
-      });
-      window.addEventListener('offline', function () {
-        Logger.info(`online status changed to down`);
-        this.$refs.noConnectionMessage.close();
-        this.isOnline = false;
-      });*/
-      /*When the main app is mounted, attach a firebase listener, and a connection state listener*/
       this.$store.dispatch('a_setAuthStateListener');
       this.$store.dispatch('a_attachOnlineStateListeners');
     }

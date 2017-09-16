@@ -90,9 +90,8 @@ var webpackConfig = merge(baseWebpackConfig, {
         urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
         handler: 'cacheFirst'
       },{
-        urlPattern: /https:\/\/fonts\.gstatic\.com\//,
+        urlPattern: /^https:\/\/fonts\.gstatic\.com\//,
         handler: 'cacheFirst'
-
       }]
     })]
 });
