@@ -4,12 +4,15 @@
       <navigation></navigation>
     </div>
     <main>
+      <!--<login v-if="!loggedIn && ['signup'].indexOf($route.name) > -1"></login>-->
+      <login v-if="!loggedIn && $route.name !== 'signup'"></login>
       <router-view></router-view>
     </main>
     <md-snackbar ref="snackbar">
       <span>{{snackMsg}}</span>
       <md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>
     </md-snackbar>
+    <!--fixme not  working, need to figure out how to display this message if the user has no internet -->
     <md-snackbar ref="noConnectionMessage">
       <span>You are not connected to the internet. Some features may be unavailable</span>
       <!--<md-button class="md-accent" @click="$refs.snackbar.close()">Close</md-button>-->
@@ -23,10 +26,12 @@
   import * as Logger from 'loglevel';
   import {mapGetters} from 'vuex';
   import Navigation from './components/Nav';
+  import Login from './initial/components/Login'
 
   export default {
     components: {
-      Navigation
+      Navigation,
+      Login
     },
     name: 'app',
     methods: {},
@@ -36,7 +41,7 @@
       }
     },
     computed:{
-      ...mapGetters(['getConnection'])
+      ...mapGetters(['getConnection', 'loggedIn'])
     },
     created() {
       bus.$on('showSnack', (message) => {
@@ -60,7 +65,7 @@
   /*required to remove chrome yellow fill on autofilled fields
   found: https://github.com/angular/material/issues/2260*/
   input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    -webkit-box-shadow: 0 0 0 1000px white inset;
   }
 
   body {

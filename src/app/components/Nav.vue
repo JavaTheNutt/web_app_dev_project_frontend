@@ -5,7 +5,7 @@
         <md-icon>menu</md-icon>
       </md-button>
       <h2 class="md-title" style="flex:1">Home Resource Planner</h2>
-      <md-button class="md-raised md-accent" @click.native="goLogin" v-if="!loggedIn">Login</md-button>
+      <!--<md-button class="md-raised md-accent" @click.native="goLogin" v-if="!loggedIn">Login</md-button>-->
     </md-toolbar>
     <md-card></md-card>
     <md-sidenav class="md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')">
