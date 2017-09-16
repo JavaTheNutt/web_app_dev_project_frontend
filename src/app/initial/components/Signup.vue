@@ -52,21 +52,12 @@
   </div>
 </template>
 <script>
-  import MdInputContainer from '../../../../node_modules/vue-material/src/components/mdInputContainer/mdInputContainer.vue';
-  import MdInput from '../../../../node_modules/vue-material/src/components/mdInputContainer/mdInput.vue';
-  import MdLayout from '../../../../node_modules/vue-material/src/components/mdLayout/mdLayout.vue';
-  import MdButton from '../../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
   import {Validator} from 'vee-validate';
   import bus from '../../services/bus';
   import * as firebase from '../service/firebase';
 
   export default {
-    components: {
-      MdButton,
-      MdLayout,
-      MdInput,
-      MdInputContainer
-    },
+    components: {},
     name: 'signup',
     data() {
       return {
@@ -89,7 +80,6 @@
           bus.$emit('showSnack', firebaseErrorMessge);
           return;
         }
-
       },
       resetForm() {
         //found at: https://stackoverflow.com/a/40856312/4108556

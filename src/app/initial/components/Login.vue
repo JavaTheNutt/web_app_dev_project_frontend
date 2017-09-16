@@ -1,4 +1,5 @@
 <!--suppress JSUnusedGlobalSymbols -->
+
 <template>
   <div>
     <h1 class="md-title">Please login to use this service</h1>
@@ -28,22 +29,12 @@
   </div>
 </template>
 <script>
-  import MdInputContainer from '../../../../node_modules/vue-material/src/components/mdInputContainer/mdInputContainer.vue';
-  import MdInput from '../../../../node_modules/vue-material/src/components/mdInputContainer/mdInput.vue';
-  import MdLayout from '../../../../node_modules/vue-material/src/components/mdLayout/mdLayout.vue';
-  import MdButton from '../../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
   import * as firebase from '../service/firebase';
   import bus from '../../services/bus';
   import * as Logger from 'loglevel';
-  import {mapActions} from 'vuex';
 
   export default {
-    components: {
-      MdButton,
-      MdLayout,
-      MdInput,
-      MdInputContainer
-    },
+    components: {},
     name: 'login',
     data() {
       return {
@@ -52,7 +43,6 @@
       }
     },
     methods: {
-
       async submitForm() {
         Logger.info('submit form clicked');
         // noinspection JSCheckFunctionSignatures
@@ -62,21 +52,11 @@
           return;
         }
         Logger.info(`form is valid`);
-        const firebaseError = await firebase.login(this.userEmail, this.userPassword);
-        if (firebaseError) {
-          Logger.info(`login failed in component while communicating with the auth server`);
-          bus.$emit('showSnack', firebaseError);
-          return;
-        }
         this.$store.dispatch('a_logInUser', {email: this.userEmail,password: this.userPassword});
         this.$router.push('/');
       }
     },
     mounted(){
-      if(!navigator.onLine){
-        bus.$emit('connection_lost');
-        Logger.info(`no internet connection`);
-      }
       Logger.info(`login mounted`);
     }
   }

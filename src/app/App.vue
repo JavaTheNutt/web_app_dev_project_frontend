@@ -45,6 +45,7 @@
     },
     created() {
       bus.$on('showSnack', (message) => {
+        Logger.info(`request to show snack message received. message: ${message}`);
         this.snackMsg = message;
         this.$refs.snackbar.open();
       });
