@@ -26,7 +26,7 @@
   import * as Logger from 'loglevel';
   import {mapGetters} from 'vuex';
   import Navigation from './components/Nav';
-  import Login from './initial/components/Login'
+  import Login from './components/Login'
 
   export default {
     components: {

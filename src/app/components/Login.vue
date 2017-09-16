@@ -29,8 +29,8 @@
   </div>
 </template>
 <script>
-  import * as firebase from '../service/firebase';
-  import bus from '../../services/bus';
+  import * as firebase from '../initial/service/firebase';
+  import bus from '../services/bus';
   import * as Logger from 'loglevel';
 
   export default {
