@@ -54,8 +54,6 @@
 <script>
   import {Validator} from 'vee-validate';
   import bus from '../../services/bus';
-  import * as firebase from '../service/firebase';
-
   export default {
     components: {},
     name: 'signup',
@@ -75,11 +73,7 @@
           bus.$emit('showSnack', 'Please ensure the form is correctly filled in');
           return;
         }
-        let firebaseErrorMessge = await firebase.signUp(this.email, this.password);
-        if(firebaseErrorMessge){
-          bus.$emit('showSnack', firebaseErrorMessge);
-          return;
-        }
+        this.$store.dispatch('a_createNewUser', {email: this.email, password: this.password})
       },
       resetForm() {
         //found at: https://stackoverflow.com/a/40856312/4108556

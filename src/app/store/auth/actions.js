@@ -3,7 +3,7 @@ import * as Logger from 'loglevel';
 import firebase from 'firebase';
 import bus from '../../services/bus';
 
-export const a_logInUser            =  async ({dispatch}, user) => {
+export const a_logInUser            = async ({dispatch}, user) => {
   Logger.info(`login user action attempting to sign in`);
   Logger.info(`user: ${JSON.stringify(user)}`);
   try {
@@ -26,9 +26,22 @@ export const a_testCurrentAuthState = ({commit}) => {
   Logger.info(`user not logged in`);
   return commit('m_logOutUser');
 };
-export const a_setAuthStateListener = ({dispatch})=>{
+export const a_createNewUser        = async ({commit}, details) => {
+  try {
+    Logger.info(`sign up function called in Firebase service`);
+    await firebase.auth().createUserWithEmailAndPassword(details.email, details.password);
+    Logger.info(`user appears correctly created`);
+  } catch (err) {
+    Logger.warn(`error creating firebase account`);
+    bus.$emit('showSnack', handleFirebaseError(err.code))
+  }
+};
+export const a_setAuthStateListener = ({dispatch}) => {
   Logger.info(`attempting to set auth state listener`);
-  firebase.auth().onAuthStateChanged((user)=>{Logger.info(`auth state change triggered`);dispatch('a_testCurrentAuthState')})
+  firebase.auth().onAuthStateChanged((user) => {
+    Logger.info(`auth state change triggered`);
+    dispatch('a_testCurrentAuthState')
+  })
 
 };
 export const a_logOutUser           = async ({dispatch}) => {
@@ -50,6 +63,15 @@ function handleFirebaseError(errCode) {
       break;
     case 'auth/wrong-password':
       return 'Password is incorrect';
+      break;
+    case 'auth/email-already-in-use':
+      return 'The specified email address is already in use';
+      break;
+    case 'auth/invalid-email':
+      return "The specified email address is invalid";
+      break;
+    case 'auth/weak-password':
+      return 'The specified password is too weak';
       break;
     default:
       return 'An unknown error has occurred '
