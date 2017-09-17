@@ -21,6 +21,9 @@
         <md-list-item @click.native="$refs.leftSidenav.close();redirect('/signup')" v-if="!loggedIn">
           <p class="side-nav--link">Signup</p>
         </md-list-item>
+        <md-list-item @click.native="$refs.leftSidenav.close();redirect('/add_address')" v-if="loggedIn">
+          <p class="side-nav--link">Add Address</p>
+        </md-list-item>
         <md-list-item @click.native="$refs.leftSidenav.close();triggerLogOut()" v-if="loggedIn">
           <p class="side-nav--link">Logout</p>
         </md-list-item>
@@ -59,6 +62,7 @@
       triggerLogOut() {
         Logger.info(`log out ui triggered, dispatching logout event`);
         this.$store.dispatch('a_logOutUser');
+        this.$router.push('/')
       }
     }
   }

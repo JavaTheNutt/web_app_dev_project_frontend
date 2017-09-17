@@ -4,6 +4,7 @@ import Vue from 'vue'
 import VueMaterial from 'vue-material';
 import VeeValidate from 'vee-validate';
 import VueResource from 'vue-resource';
+import * as VueGoogleMaps from 'vue2-google-maps';
 import 'vue-material/dist/vue-material.css'
 
 import {App} from './app'
@@ -25,7 +26,11 @@ firebase.initializeApp(privateConfig.firebase);
 Vue.config.productionTip = false;
 Vue.use(VueMaterial);
 Vue.use(VeeValidate);
-
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: privateConfig.mapsApiKey
+  }
+});
 Vue.use(VueResource);
 Vue.material.registerTheme('default', {
   primary: 'blue-grey',
