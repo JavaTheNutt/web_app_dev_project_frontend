@@ -3,7 +3,6 @@
 import Vue from 'vue'
 import VueMaterial from 'vue-material';
 import VeeValidate from 'vee-validate';
-import VueResource from 'vue-resource';
 import * as VueGoogleMaps from 'vue2-google-maps';
 import 'vue-material/dist/vue-material.css'
 
@@ -14,10 +13,11 @@ import privateConfig from '../config/private';
 import firebase from 'firebase';
 import * as log from 'loglevel';
 import axios from 'axios';
+
 require('../node_modules/vue-material/dist/vue-material.css');
-if(process.env.NODE_ENV === 'production'){
+if (process.env.NODE_ENV === 'production') {
   log.setLevel('silent');
-}else{
+} else {
   log.setLevel('trace');
 }
 
@@ -33,9 +33,18 @@ Vue.use(VueGoogleMaps, {
 });
 //Vue.use(VueResource);
 Vue.prototype.$http = axios; //switch to axios since vue-resource is no longer the recommended http client
-Vue.material.registerTheme('default', {
-  primary: 'blue-grey',
-  accent: 'red'
+Vue.material.registerTheme({
+  'default': {
+    primary: 'blue-grey',
+    accent: 'red',
+    warn: 'orange',
+    backgroud: 'grey'
+  },
+  'buttons':{
+    primary: 'indigo',
+    accent: 'green'
+
+  }
 });
 
 /* eslint-disable no-new */

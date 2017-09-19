@@ -42,51 +42,61 @@
         </md-select>
       </md-input-container>
       <div class="form-flex-container--button">
-        <md-button class="md-raised md-accent" type="button" @click.native="checkAddress"
+        <md-button class="md-raised md-accent" type="button" v-if="!formattedAddressShown" @click.native="checkAddress"
                    :disabled="!checkAddressButtonEnabled">Check Address
         </md-button>
-        <md-button class="md-raised md-primary" type="button" @click.native="resetForm">Reset</md-button>
-        <!--<md-button class="md-raised md-accent" type="button" @click.native="toggleMap">{{mapButtonText}}</md-button>-->
+        <md-button class="md-raised md-warn" type="button" @click.native="resetForm">Reset</md-button>
       </div>
     </form>
-
-    <!--<p class="md-subtitle" v-if="formattedAddressShown">{{googleFormattedAddress}}</p>--></div>
+    <p class="md-subtitle" v-if="formattedAddressShown">We found one address matching what you sent. Use this?</p>
+    <p class="md-subtitle" v-if="formattedAddressShown">{{googleFormattedAddress}}</p>
+    <md-button md-theme="buttons" v-if="formattedAddressShown" class="md-raised md-accent md-icon-button" type="button"><md-icon>done</md-icon></md-button>
+    <md-button  class="md-raised md-accent md-icon-button" v-if="formattedAddressShown" type="button"><md-icon>clear</md-icon></md-button>
+  </div>
 </template>
 <script>
   import * as Logger from 'loglevel';
   import {mapGetters} from 'vuex';
-  //import bus from '@/app/services/bus';
+  import bus from '../services/bus';
 
   import {geocodeAddress} from '@/app/services/geocoding';
+  import MdButton from '../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
+  import MdIcon from '../../../node_modules/vue-material/src/components/mdIcon/mdIcon.vue';
+
   const mapAPIKey = require('../../../config/private').mapsApiKey;
   //fixme make button disabled while form invalid
   export default {
+    components: {
+      MdIcon,
+      MdButton},
     name: 'geocoded_form',
     data() {
       return {
         selectAddressFromListShown: false,
+        formattedAddressShown: false,
         sendableAddress: {
           country: '',
           address1: '',
           address2: '',
           address3: ''
         },
-        possibleAddresses: []
+        possibleAddresses: [],
+        googleFormattedAddress: ''
       }
     },
     computed: {
-      ...mapGetters(['getCountryNames']),
-      checkAddressButtonEnabled() {
+      ...mapGetters(['getCountryNames']), //fetch country names from the store.
+      checkAddressButtonEnabled() { //this function will watch to see if the check address button should be enabled
         Logger.info(`form is ${this.errors.items.length > 0 ? 'not' : ''} valid`);
         Logger.info(`country is ${this.sendableAddress.country.length > 0 ? '' : 'not' } selected`);
         /*Had to add this check as this function was being ran before the fields object was populated*/
         if (!this.fields || !this.fields.address1) {
-          Logger.warn(`fields not loaded`);
+          Logger.info(`fields not loaded`);
           return false;
         }
-        let formTouched = this.fields && this.fields.address1 && this.fields.address1.pristine;
+        let formTouched = this.fields && this.fields.address1 && this.fields.address1.pristine; //has the form rendered? and is it still pristine?
         Logger.info(`form touched: ${formTouched}`);
-        Logger.info(` testing for address1: ${JSON.stringify(this.fields.address1)}`); //fixme this works sporadically, appears that the first time this compueted value is calculated, the fields do not exist
+        Logger.info(` testing for address1: ${JSON.stringify(this.fields.address1)}`);
         return this.errors.items.length === 0 && !formTouched && this.sendableAddress.country.length > 0;
       }
     },
@@ -94,15 +104,37 @@
       async checkAddress() {
         Logger.info(`check address button clicked`);
         try {
-          //const fetchedResults = await fetchGeocodeResults(this.$http, this.sendableAddress);
           const fetchedResults = await geocodeAddress(this.sendableAddress);
           Logger.info(`results fetched from geocode without error.`);
           Logger.info(`results: ${JSON.stringify(fetchedResults)}`);
+          this.handleAddress(fetchedResults.data.results)
         } catch (err) {
           Logger.warn(`there was an error thrown in the on click handler for checking an address`);
           Logger.error(`error details: ${JSON.stringify(err)}`);
         }
+      },
+      handleAddress(addressList){
+        if(addressList.length === 1){
+          bus.$emit('showSnack', 'exactly one address found');
+          this.googleFormattedAddress = addressList[0].formatted_address;
+          this.formattedAddressShown = true;
+        }
+      },
+      resetForm(){
+        //found at: https://stackoverflow.com/a/40856312/4108556 resets data object to initial
+        Object.assign(this.$data, this.$options.data.call(this));
+        //found at: https://github.com/baianat/vee-validate/issues/285 iterate through all fields that have validators attached and find the
+        this.$nextTick(function () {
+          const self = this;
+          Object.keys(this.fields).some(function (key) {
+            self.$validator.flag(key, {
+              untouched: true
+            })
+          });
+          this.errors.clear();
+        })
       }
+
     }
   }
 
@@ -121,7 +153,7 @@
       throw new Error(`error fetching from google api`, e);
     }
     Logger.info(`fetch from google api successful`);
-    const res         = JSON.parse(JSON.stringify(apiResponse));
+    const res = JSON.parse(JSON.stringify(apiResponse));
     Logger.info(`results retrieved ${JSON.stringify(res)}`);
     if (res.status === 200) {
       Logger.info(`result has status 'OK'`);
