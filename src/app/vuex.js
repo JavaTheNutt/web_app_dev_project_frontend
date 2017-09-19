@@ -1,4 +1,4 @@
 import {vuex as initial} from './initial';
-import {auth, connection} from './store'
+import {auth, connection, countries} from './store'
 
-export default {initial, auth, connection};
+export default {initial, auth, connection, countries};

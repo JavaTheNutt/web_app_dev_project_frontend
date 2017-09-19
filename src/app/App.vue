@@ -27,7 +27,7 @@
   import {mapGetters} from 'vuex';
   import Navigation from './components/Nav';
   import Login from './components/Login'
-
+//fixme
   export default {
     components: {
       Navigation,
@@ -54,6 +54,7 @@
       Logger.info(`main app mounted`);
       this.$store.dispatch('a_setAuthStateListener');
       this.$store.dispatch('a_attachOnlineStateListeners');
+      this.$store.dispatch('a_setCountryNames');
     }
   }
 </script>
