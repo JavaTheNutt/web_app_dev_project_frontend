@@ -57,6 +57,7 @@
   import {mapGetters} from 'vuex';
   //import bus from '@/app/services/bus';
 
+  import {geocodeAddress} from '@/app/services/geocoding';
   const mapAPIKey = require('../../../config/private').mapsApiKey;
   //fixme make button disabled while form invalid
   export default {
@@ -93,7 +94,8 @@
       async checkAddress() {
         Logger.info(`check address button clicked`);
         try {
-          const fetchedResults = await fetchGeocodeResults(this.$http, this.sendableAddress);
+          //const fetchedResults = await fetchGeocodeResults(this.$http, this.sendableAddress);
+          const fetchedResults = await geocodeAddress(this.sendableAddress);
           Logger.info(`results fetched from geocode without error.`);
           Logger.info(`results: ${JSON.stringify(fetchedResults)}`);
         } catch (err) {
@@ -111,11 +113,7 @@
     let addressString = formatAddress(addressDetails);
     Logger.info(`formatted address for geocoding: ${JSON.stringify(addressString)}`);
     try {
-      apiResponse = await http.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
-        params:{
-          address : addressString,
-          api_key: mapAPIKey
-      }});
+      apiResponse = await geocodeAddress(addressDetails);
       Logger.info(`results retrieved without error`);
     } catch (e) {
       Logger.warn(`error while fetching from google api.`);
