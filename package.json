@@ -1,9 +1,17 @@
 {
-  "name": "hrp_proto_v7",
+  "name": "finance_tracker_frontend_01",
   "version": "1.0.0",
-  "description": "prototype #7 frontend for home erp system",
+  "description": "Vue2 frontend for final year Web Application Development. A finance tracker application",
   "author": "joe.wemyss<joe.wemyss@javathenutt.com>",
   "private": true,
+  "repository":{
+    "type": "git",
+    "url": "https://github.com/JavaTheNutt/web_app_dev_project_frontend"
+  },
+  "bugs": {
+    "url": "https://github.com/JavaTheNutt/web_app_dev_project_frontend/issues"
+  },
+  "homepage": "https://github.com/JavaTheNutt/web_app_dev_project_frontend#readme",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",

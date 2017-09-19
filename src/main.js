@@ -13,7 +13,7 @@ import store from './store';
 import privateConfig from '../config/private';
 import firebase from 'firebase';
 import * as log from 'loglevel';
-
+import axios from 'axios';
 require('../node_modules/vue-material/dist/vue-material.css');
 if(process.env.NODE_ENV === 'production'){
   log.setLevel('silent');
@@ -31,7 +31,8 @@ Vue.use(VueGoogleMaps, {
     key: privateConfig.mapsApiKey
   }
 });
-Vue.use(VueResource);
+//Vue.use(VueResource);
+Vue.prototype.$http = axios; //switch to axios since vue-resource is no longer the recommended http client
 Vue.material.registerTheme('default', {
   primary: 'blue-grey',
   accent: 'red'

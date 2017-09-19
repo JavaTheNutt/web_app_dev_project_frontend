@@ -1,7 +1,8 @@
 <template>
   <div>
     <h1 class="md-title">This is the add address view</h1>
-    <form novalidate @submit.stop.prevent="submitForm">
+    <geocoded-form></geocoded-form>
+    <!--<form novalidate @submit.stop.prevent="submitForm">
       <md-input-container :class="{'md-input-invalid': errors.has('address1')}">
         <label>Address Line One</label>
         <md-input type="text" v-model="address1" data-vv-name="address1" v-validate="'required|min:3'"
@@ -45,12 +46,12 @@
           </md-option>
         </md-select>
       </md-input-container>
-      <div class="form-flex-container--button">
+      <div class="form-flex-container&#45;&#45;button">
         <md-button class="md-raised md-accent" type="button" @click.native="checkAddress">Check Address</md-button>
         <md-button class="md-raised md-primary" type="button" @click.native="resetForm">Reset</md-button>
         <md-button class="md-raised md-accent" type="button" @click.native="toggleMap">{{mapButtonText}}</md-button>
       </div>
-    </form>
+    </form>-->
     <p class="md-subtitle" v-if="formattedAddressShown">{{googleFormattedAddress}}</p>
     <gmap-map :center="{lat:selectedAddressMarker.position.lat, lng:selectedAddressMarker.position.lng}" :zoom="20" map-type-id="terrain" class="custom-view-map" v-if="mapShown">
       <gmap-marker :position="selectedAddressMarker.position"></gmap-marker>
@@ -67,13 +68,15 @@
   import MdOption from '../../../../node_modules/vue-material/src/components/mdSelect/mdOption.vue';
   import MdInputContainer from '../../../../node_modules/vue-material/src/components/mdInputContainer/mdInputContainer.vue';
   import {mapGetters} from 'vuex';
+  import GeocodedForm from '@/app/components/GeocodedForm';
 
   const mapAPIKey = require('../../../../config/private').mapsApiKey;
   export default {
     components: {
       MdInputContainer,
       MdOption,
-      MdSelect
+      MdSelect,
+      GeocodedForm
     },
     name: 'add_address',
     data() {
