@@ -1,6 +1,6 @@
 {
-  "name": "hrp_proto_v7",
-  "short_name": "HHome RP",
+  "name": "finance_tracker_frontend_01",
+  "short_name": "Finance Tracker",
   "icons": [
     {
       "src": "/static/img/icons/android-chrome-192x192.png",

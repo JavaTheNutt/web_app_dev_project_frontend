@@ -48,10 +48,17 @@
         <md-button class="md-raised md-warn" type="button" @click.native="resetForm">Reset</md-button>
       </div>
     </form>
-    <p class="md-subtitle" v-if="formattedAddressShown">We found one address matching what you sent. Use this?</p>
-    <p class="md-subtitle" v-if="formattedAddressShown">{{googleFormattedAddress}}</p>
-    <md-button md-theme="buttons" v-if="formattedAddressShown" class="md-raised md-accent md-icon-button" type="button"><md-icon>done</md-icon></md-button>
-    <md-button  class="md-raised md-accent md-icon-button" v-if="formattedAddressShown" type="button"><md-icon>clear</md-icon></md-button>
+    <div v-if="formattedAddressShown">
+      <p class="md-subtitle">We found one address matching what you sent. Use this?</p>
+      <p class="md-subtitle">{{googleFormattedAddress}}</p>
+      <md-button md-theme="buttons" class="md-raised md-accent md-icon-button" @click.native="acceptSelectedAddress"
+                 type="button">
+        <md-icon>done</md-icon>
+      </md-button>
+      <md-button class="md-raised md-accent md-icon-button" type="button" @click.native="rejectSelectedAddress">
+        <md-icon>clear</md-icon>
+      </md-button>
+    </div>
   </div>
 </template>
 <script>
@@ -60,15 +67,9 @@
   import bus from '../services/bus';
 
   import {geocodeAddress} from '@/app/services/geocoding';
-  import MdButton from '../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
-  import MdIcon from '../../../node_modules/vue-material/src/components/mdIcon/mdIcon.vue';
 
-  const mapAPIKey = require('../../../config/private').mapsApiKey;
-  //fixme make button disabled while form invalid
   export default {
-    components: {
-      MdIcon,
-      MdButton},
+    components: {},
     name: 'geocoded_form',
     data() {
       return {
@@ -80,6 +81,17 @@
           address2: '',
           address3: ''
         },
+        chosenAddress: {
+          googleDetails: {},
+          formattedDetails: {
+            googlePlaceId: '',
+            formattedName: '',
+            geometry: {
+              lat: 0.0,
+              lng: 0.0
+            }
+          }
+        },
         possibleAddresses: [],
         googleFormattedAddress: ''
       }
@@ -87,6 +99,10 @@
     computed: {
       ...mapGetters(['getCountryNames']), //fetch country names from the store.
       checkAddressButtonEnabled() { //this function will watch to see if the check address button should be enabled
+        if(this.sendableAddress.address1.length < 1){
+          Logger.info(`address1 does not exist`);
+          return false;
+        }
         Logger.info(`form is ${this.errors.items.length > 0 ? 'not' : ''} valid`);
         Logger.info(`country is ${this.sendableAddress.country.length > 0 ? '' : 'not' } selected`);
         /*Had to add this check as this function was being ran before the fields object was populated*/
@@ -107,20 +123,30 @@
           const fetchedResults = await geocodeAddress(this.sendableAddress);
           Logger.info(`results fetched from geocode without error.`);
           Logger.info(`results: ${JSON.stringify(fetchedResults)}`);
+          Logger.info(`attempting to handle the results of the fetch operation`);
           this.handleAddress(fetchedResults.data.results)
         } catch (err) {
           Logger.warn(`there was an error thrown in the on click handler for checking an address`);
           Logger.error(`error details: ${JSON.stringify(err)}`);
         }
       },
-      handleAddress(addressList){
-        if(addressList.length === 1){
+      handleAddress(addressList) {
+        Logger.info(`handling results of query`);
+        if (addressList.length === 1) {
+          Logger.info(`there was exactly one result returned`);
           bus.$emit('showSnack', 'exactly one address found');
-          this.googleFormattedAddress = addressList[0].formatted_address;
-          this.formattedAddressShown = true;
+          this.possibleAddresses           = [];
+          this.chosenAddress.googleDetails = addressList[0];
+          this.googleFormattedAddress      = addressList[0].formatted_address;
+          this.formattedAddressShown       = true;
+        }
+        if (addressList.length > 1) {
+          bus.$emit('showSnack', 'multiple addresses found');
+          this.googleFormattedAddress = null;
+          this.possibleAddresses      = addressList;
         }
       },
-      resetForm(){
+      resetForm() {
         //found at: https://stackoverflow.com/a/40856312/4108556 resets data object to initial
         Object.assign(this.$data, this.$options.data.call(this));
         //found at: https://github.com/baianat/vee-validate/issues/285 iterate through all fields that have validators attached and find the
@@ -133,51 +159,35 @@
           });
           this.errors.clear();
         })
+      },
+      acceptSelectedAddress() {
+        Logger.info(`accept selected address clicked`);
+        Logger.info(`currently selected address: ${JSON.stringify(this.chosenAddress.googleDetails)}`);
+        this.chosenAddress.formattedDetails = {
+          googlePlaceId: this.chosenAddress.googleDetails.place_id,
+          formattedAddress: this.chosenAddress.googleDetails.formatted_address,
+          geometry: {
+            lat: this.chosenAddress.googleDetails.geometry.location.lat,
+            lng: this.chosenAddress.googleDetails.geometry.location.lng,
+          }
+        };
+        Logger.info(`now formatted details are ${JSON.stringify(this.chosenAddress.formattedDetails)}`);
+        //fixme somewhere between the log statement above and the emit below, all properties of the object are lost
+        //possibly becuase the form data gets cleared, and thus the reference to the data?
+        //try this:https://forum.vuejs.org/t/passing-data-back-to-parent/1201/2
+        //possibly try constructuing a new object from the properties of the old.
+        this.$emit('addressSet', JSON.stringify(this.chosenAddress.formattedDetails));//using this.$emit to emit back up component hierarchy, instead of along a bus
+        //fixme hide result and emit selected address to parent.
+        this.resetForm();
+
+      },
+      rejectSelectedAddress() {
+        this.chosenAddress         = {};
+        this.formattedAddressShown = false;
+        bus.$emit('showSnack', 'please adjust your search parameters and try again')
       }
-
+      //fixme implement logic to handle multiple addresses being returned from the server
     }
-  }
-
-  async function fetchGeocodeResults(http, addressDetails) {
-    Logger.info(`attempting to fetch geocode results`);
-    //stringify and then parse result for logging readability, since google api's return JSONP to prevent CORS issues.
-    let apiResponse;
-    let addressString = formatAddress(addressDetails);
-    Logger.info(`formatted address for geocoding: ${JSON.stringify(addressString)}`);
-    try {
-      apiResponse = await geocodeAddress(addressDetails);
-      Logger.info(`results retrieved without error`);
-    } catch (e) {
-      Logger.warn(`error while fetching from google api.`);
-      Logger.error(`${e}`);
-      throw new Error(`error fetching from google api`, e);
-    }
-    Logger.info(`fetch from google api successful`);
-    const res = JSON.parse(JSON.stringify(apiResponse));
-    Logger.info(`results retrieved ${JSON.stringify(res)}`);
-    if (res.status === 200) {
-      Logger.info(`result has status 'OK'`);
-      return res.body.result;
-    }
-    const errMsg = res.body.error_text ? res.body.error_text : 'Unknown';
-    Logger.warn(`there was an error fetching geocode results`);
-    throw new Error(`add item failed for ${errMsg} reason`);
-  }
-
-  function formatAddress({address1, address2, address3, country}) {
-    Logger.info('attempting to format address');
-    Logger.info(`first line: ${address1}`);
-    let address = address1 + ', ';
-    if (address2 && address2.length > 0) {
-      Logger.info(`second line found. Second line: ${address2}`);
-      address += address2 + ', ';
-      if (address3 && address2.length > 0) {
-        Logger.info(`Third line found. Third line: ${address3}`);
-        address += address3 + ', ';
-      }
-    }
-    Logger.info(`returning ${address + country}`);
-    return address + country;
   }
 </script>
 <style scoped lang="scss">

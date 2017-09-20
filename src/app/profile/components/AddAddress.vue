@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="md-title">This is the add address view</h1>
-    <geocoded-form></geocoded-form>
+    <geocoded-form @addressSet="setCheckedAddress" v-if="formShown"></geocoded-form>
     <!--<form novalidate @submit.stop.prevent="submitForm">
       <md-input-container :class="{'md-input-invalid': errors.has('address1')}">
         <label>Address Line One</label>
@@ -52,7 +52,7 @@
         <md-button class="md-raised md-accent" type="button" @click.native="toggleMap">{{mapButtonText}}</md-button>
       </div>
     </form>-->
-    <p class="md-subtitle" v-if="formattedAddressShown">{{googleFormattedAddress}}</p>
+    <!--<p class="md-subtitle" v-if="formattedAddressShown">{{googleFormattedAddress}}</p>-->
     <gmap-map :center="{lat:selectedAddressMarker.position.lat, lng:selectedAddressMarker.position.lng}" :zoom="20" map-type-id="terrain" class="custom-view-map" v-if="mapShown">
       <gmap-marker :position="selectedAddressMarker.position"></gmap-marker>
     </gmap-map>
@@ -82,6 +82,7 @@
     data() {
       return {
         mapShown: false,
+        formShown: true,
         mapMarkerShown: false,
         country: '',
         address1: '',
@@ -116,6 +117,12 @@
       ...mapGetters(['getCountryNames'])
     },
     methods: {
+      setCheckedAddress(addressDetails){
+        const details = JSON.parse(addressDetails);
+        Logger.info(`address event recived from child component`);
+        Logger.info(`details passed: ${JSON.stringify(addressDetails)}`);
+        this.formShown = false;
+      },
       async checkAddress() {
         Logger.info(`submit form clicked`);
         if (!await this.$validator.validateAll()) {
