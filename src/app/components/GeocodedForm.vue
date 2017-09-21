@@ -30,7 +30,7 @@
           </md-option>
         </md-select>
       </md-input-container>
-      <p v-if="selectAddressFromListShown">
+      <!--<p v-if="selectAddressFromListShown">
         We found {{possibleAddresses.length}} possible addresses, please select one</p>
       <md-input-container v-if="selectAddressFromListShown">
         <label for="selectAddress">Select your address</label>
@@ -40,7 +40,7 @@
             {{currentAddress.formatted_address}}
           </md-option>
         </md-select>
-      </md-input-container>
+      </md-input-container>-->
       <div class="form-flex-container--button">
         <md-button class="md-raised md-accent" type="button" v-if="!formattedAddressShown" @click.native="checkAddress"
                    :disabled="!checkAddressButtonEnabled">Check Address
@@ -48,17 +48,6 @@
         <md-button class="md-raised md-warn" type="button" @click.native="resetForm">Reset</md-button>
       </div>
     </form>
-    <div v-if="formattedAddressShown">
-      <p class="md-subtitle">We found one address matching what you sent. Use this?</p>
-      <p class="md-subtitle">{{googleFormattedAddress}}</p>
-      <md-button md-theme="buttons" class="md-raised md-accent md-icon-button" @click.native="acceptSelectedAddress"
-                 type="button">
-        <md-icon>done</md-icon>
-      </md-button>
-      <md-button class="md-raised md-accent md-icon-button" type="button" @click.native="rejectSelectedAddress">
-        <md-icon>clear</md-icon>
-      </md-button>
-    </div>
     <div v-if="addressTableShown">
       <md-table-card>
         <md-toolbar>
@@ -68,14 +57,9 @@
           </md-button>
         </md-toolbar>
         <md-table>
-          <md-table-header>
-            <md-table-row>
-              <md-table-head>Address</md-table-head>
-            </md-table-row>
-          </md-table-header>
           <md-table-body>
-            <md-table-row v-for="(address, index) in possibleAddresses" :key="index" :md-item="address" v-if="rowShown(index)">
-              <md-table-cell :md-numeric="false">{{address.formatted_address}}</md-table-cell>
+            <md-table-row v-for="(address, index) in possibleAddresses" :key="index" :md-item="address" v-if="rowShown(index)" @click.native="itemSelected(address)">
+              <md-table-cell :md-numeric="false" ><mdInkRipple ></mdInkRipple>{{address.formatted_address}}</md-table-cell>
             </md-table-row>
           </md-table-body>
         </md-table>
@@ -91,6 +75,18 @@
       </md-table-card>
 
     </div>
+    <div v-if="formattedAddressShown">
+      <p class="md-subtitle">Is this the address you would like to add?</p>
+      <p class="md-subtitle">{{googleFormattedAddress}}</p>
+      <md-button md-theme="buttons" class="md-raised md-accent md-icon-button" @click.native="acceptSelectedAddress"
+                 type="button">
+        <md-icon>done</md-icon>
+      </md-button>
+      <md-button class="md-raised md-accent md-icon-button" type="button" @click.native="rejectSelectedAddress">
+        <md-icon>clear</md-icon>
+      </md-button>
+    </div>
+
   </div>
 </template>
 <script>
@@ -99,10 +95,13 @@
   import bus from '../services/bus';
   import customTablePagination from './CustomTablePagination';
   import {geocodeAddress} from '@/app/services/geocoding';
+  import MdInkRipple from '../../../node_modules/vue-material/src/core/components/mdInkRipple/mdInkRipple.vue';
 
 
   export default {
-    components: {customTablePagination},
+    components: {
+      MdInkRipple,
+      customTablePagination},
     name: 'geocoded_form',
 
     data() {
@@ -171,6 +170,9 @@
       }
     },
     methods: {
+      itemSelected(item){
+        Logger.info(`selected address is: ${item.formatted_address}`);
+      },
       rowShown(index){
         Logger.info(`attempting to see if row with index ${index} should be shown`);
         Logger.info(`row shown: ${index >= this.tableBounds.lower && index <= this.tableBounds.upper}`);
