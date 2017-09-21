@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form novalidate @submit.stop.prevent="submitForm">
+    <form novalidate @submit.stop.prevent="submitForm" v-if="showAddressForm">
       <md-input-container :class="{'md-input-invalid': errors.has('address1')}">
         <label>Address Line One</label>
         <md-input type="text" v-model="sendableAddress.address1" data-vv-name="address1" v-validate="'required'"
@@ -59,21 +59,56 @@
         <md-icon>clear</md-icon>
       </md-button>
     </div>
+    <div v-if="addressTableShown">
+      <md-table-card>
+        <md-toolbar>
+          <h1 class="md-title">Possible Addresses</h1>
+          <md-button class="md-icon-button">
+            <md-icon>filter_list</md-icon>
+          </md-button>
+        </md-toolbar>
+        <md-table>
+          <md-table-header>
+            <md-table-row>
+              <md-table-head>Address</md-table-head>
+            </md-table-row>
+          </md-table-header>
+          <md-table-body>
+            <md-table-row v-for="(address, index) in possibleAddresses" :key="index" :md-item="address">
+              <md-table-cell :md-numeric="false">{{address.formatted_address}}</md-table-cell>
+            </md-table-row>
+          </md-table-body>
+        </md-table>
+        <custom-table-pagination
+          md-size="5"
+          md-label="Rows"
+          md-seperator="of"
+          :mdPage="currentTablePage"
+          :mdTotal="possibleAddresses.length"
+          :md-page-options="[5, 10, 25, 50]"
+          @pagination="onPagination"
+        ></custom-table-pagination>
+      </md-table-card>
+
+    </div>
   </div>
 </template>
 <script>
   import * as Logger from 'loglevel';
   import {mapGetters} from 'vuex';
   import bus from '../services/bus';
-
+  import customTablePagination from './CustomTablePagination';
   import {geocodeAddress} from '@/app/services/geocoding';
 
+
   export default {
-    components: {},
+    components: {customTablePagination},
     name: 'geocoded_form',
     data() {
       return {
+        currentTablePage: 1,
         selectAddressFromListShown: false,
+        showAddressForm: true,
         formattedAddressShown: false,
         sendableAddress: {
           country: '',
@@ -93,7 +128,8 @@
           }
         },
         possibleAddresses: [],
-        googleFormattedAddress: ''
+        googleFormattedAddress: '',
+        addressTableShown: false
       }
     },
     computed: {
@@ -117,6 +153,10 @@
       }
     },
     methods: {
+      onPagination(data){
+        Logger.info(`table pagination event recieved`);
+        Logger.info(`data recieved: ${JSON.stringify(data)}`);
+      },
       async checkAddress() {
         Logger.info(`check address button clicked`);
         try {
@@ -144,10 +184,13 @@
           bus.$emit('showSnack', 'multiple addresses found');
           this.googleFormattedAddress = null;
           this.possibleAddresses      = addressList;
+          this.addressTableShown = true;
+          this.showAddressForm = false;
         }
       },
       resetForm() {
         //found at: https://stackoverflow.com/a/40856312/4108556 resets data object to initial
+        this.showAddressForm = true;
         Object.assign(this.$data, this.$options.data.call(this));
         //found at: https://github.com/baianat/vee-validate/issues/285 iterate through all fields that have validators attached and find the
         this.$nextTick(function () {
@@ -158,7 +201,7 @@
             })
           });
           this.errors.clear();
-        })
+        });
       },
       acceptSelectedAddress() {
         Logger.info(`accept selected address clicked`);
@@ -188,6 +231,7 @@
         bus.$emit('showSnack', 'please adjust your search parameters and try again')
       }
       //fixme implement logic to handle multiple addresses being returned from the server
+
     }
   }
 </script>

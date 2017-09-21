@@ -2,6 +2,10 @@
   <div>
     <h1 class="md-title">This is the add address view</h1>
     <geocoded-form @addressSet="setCheckedAddress" v-if="formShown"></geocoded-form>
+    <div v-if="mapShown">
+      <md-button class="md-raised md-accent" @click.native="acceptAddress">Accept</md-button>
+      <md-button class="md-raised md-warn" @click.native="rejectAddress">Reject</md-button>
+    </div>
     <gmap-map :center="{lat:chosenAddress.geometry.lat, lng:chosenAddress.geometry.lng}" :zoom="20" map-type-id="terrain" class="custom-view-map" v-if="mapShown">
       <gmap-marker :position="chosenAddress.geometry"></gmap-marker>
     </gmap-map>
@@ -12,10 +16,12 @@
   import * as Logger from 'loglevel';
   import {mapGetters} from 'vuex';
   import GeocodedForm from '@/app/components/GeocodedForm';
+  import MdButton from '../../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
 
   const mapAPIKey = require('../../../../config/private').mapsApiKey;
   export default {
     components: {
+      MdButton,
       GeocodedForm
     },
     name: 'add_address',
@@ -56,6 +62,17 @@
         this.chosenAddress = details;
         this.formShown = false;
         this.mapShown = true;
+      },
+      acceptAddress(){
+        Logger.info(`accept address clicked`);
+        //here i will probably move the selected address to the store, as I now have its context.
+        //this should also return to its calling function,
+      },
+      rejectAddress(){
+        Logger.info(`reject address clicked`);
+        this.chosenAddress = null;
+        this.mapShown = false;
+        this.formShown = true;
       }
     }
   }

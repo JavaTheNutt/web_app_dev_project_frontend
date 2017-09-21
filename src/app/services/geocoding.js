@@ -11,7 +11,7 @@ export const geocodeAddress = async (address) => {
     const geocodeResult = await axios.get(BASE_GEOCODE_URL, {
       params: {
         address: addressString,
-        api_key: mapApiKey
+        key: mapApiKey
       }
     });
     Logger.info(`geocode result assumed fetched. Data: ${JSON.stringify(geocodeResult)}`);
@@ -33,5 +33,5 @@ function formatAddress({address1, address2, address3, country}) {
     address += address3 + ', ';
   }
   Logger.info(`returning ${address + country}`);
-  return address + country;
+  return `${address}${country}`;
 }
