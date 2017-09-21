@@ -49,6 +49,7 @@
       </div>
     </form>
     <div v-if="addressTableShown">
+      <md-button class="md-raised md-warn" @click.native="returnToForm">Re-enter address</md-button>
       <md-table-card>
         <md-toolbar>
           <h1 class="md-title">Possible Addresses</h1>
@@ -96,10 +97,12 @@
   import customTablePagination from './CustomTablePagination';
   import {geocodeAddress} from '@/app/services/geocoding';
   import MdInkRipple from '../../../node_modules/vue-material/src/core/components/mdInkRipple/mdInkRipple.vue';
+  import MdButton from '../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
 
 
   export default {
     components: {
+      MdButton,
       MdInkRipple,
       customTablePagination},
     name: 'geocoded_form',
@@ -144,34 +147,36 @@
           Logger.info(`address1 does not exist`);
           return false;
         }
-        Logger.info(`form is ${this.errors.items.length > 0 ? 'not' : ''} valid`);
-        Logger.info(`country is ${this.sendableAddress.country.length > 0 ? '' : 'not' } selected`);
-        /*Had to add this check as this function was being ran before the fields object was populated*/
-        if (!this.fields || !this.fields.address1) {
-          Logger.info(`fields not loaded`);
+        if(this.sendableAddress.country.length < 1){
+          Logger.info(`country does not exist`);
           return false;
         }
-        let formTouched = this.fields && this.fields.address1 && this.fields.address1.pristine; //has the form rendered? and is it still pristine?
-        Logger.info(`form touched: ${formTouched}`);
-        Logger.info(` testing for address1: ${JSON.stringify(this.fields.address1)}`);
-        return this.errors.items.length === 0 && !formTouched && this.sendableAddress.country.length > 0;
+        return true;
       },
       tableBounds(){
+        //fixme remove irrelevent logic and store result for logging, rather than computing twice
         Logger.info(`testing the current view bounds for table`);
-        if(this.currentTablePage === 1){
+        /*if(this.currentTablePage === 1){
           Logger.info(`on first page`);
           Logger.info(`any item with index between 0 and ${this.currentPageSize -1} should be shown`);
           return {upper: this.currentPageSize - 1, lower: 0}
         }
-        Logger.info(`not first page`);
+        Logger.info(`not first page`);*/
         Logger.info(`any item with index between ${((this.currentPageSize * this.currentTablePage)) - this.currentPageSize} and ${(this.currentPageSize * this.currentTablePage) -1} should be shown`);
         return {upper: (this.currentPageSize * this.currentTablePage) -1, lower: ((this.currentPageSize * this.currentTablePage)) - this.currentPageSize};
 
       }
     },
     methods: {
+      returnToForm(){
+        this.showAddressForm = true;
+        this.addressTableShown = false;
+      },
       itemSelected(item){
         Logger.info(`selected address is: ${item.formatted_address}`);
+        this.chosenAddress.googleDetails = item;
+        this.googleFormattedAddress      = item.formatted_address;
+        this.formattedAddressShown       = true;
       },
       rowShown(index){
         Logger.info(`attempting to see if row with index ${index} should be shown`);
