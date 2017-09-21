@@ -74,13 +74,13 @@
             </md-table-row>
           </md-table-header>
           <md-table-body>
-            <md-table-row v-for="(address, index) in possibleAddresses" :key="index" :md-item="address">
+            <md-table-row v-for="(address, index) in possibleAddresses" :key="index" :md-item="address" v-if="rowShown(index)">
               <md-table-cell :md-numeric="false">{{address.formatted_address}}</md-table-cell>
             </md-table-row>
           </md-table-body>
         </md-table>
         <custom-table-pagination
-          md-size="5"
+          :md-size="currentPageSize"
           md-label="Rows"
           md-seperator="of"
           :mdPage="currentTablePage"
@@ -104,9 +104,11 @@
   export default {
     components: {customTablePagination},
     name: 'geocoded_form',
+
     data() {
       return {
         currentTablePage: 1,
+        currentPageSize: 5,
         selectAddressFromListShown: false,
         showAddressForm: true,
         formattedAddressShown: false,
@@ -129,7 +131,11 @@
         },
         possibleAddresses: [],
         googleFormattedAddress: '',
-        addressTableShown: false
+        addressTableShown: false,
+        tableViewBound:{
+          upper: 5,
+          lower: 0
+        }
       }
     },
     computed: {
@@ -150,12 +156,31 @@
         Logger.info(`form touched: ${formTouched}`);
         Logger.info(` testing for address1: ${JSON.stringify(this.fields.address1)}`);
         return this.errors.items.length === 0 && !formTouched && this.sendableAddress.country.length > 0;
+      },
+      tableBounds(){
+        Logger.info(`testing the current view bounds for table`);
+        if(this.currentTablePage === 1){
+          Logger.info(`on first page`);
+          Logger.info(`any item with index between 0 and ${this.currentPageSize -1} should be shown`);
+          return {upper: this.currentPageSize - 1, lower: 0}
+        }
+        Logger.info(`not first page`);
+        Logger.info(`any item with index between ${((this.currentPageSize * this.currentTablePage)) - this.currentPageSize} and ${(this.currentPageSize * this.currentTablePage) -1} should be shown`);
+        return {upper: (this.currentPageSize * this.currentTablePage) -1, lower: ((this.currentPageSize * this.currentTablePage)) - this.currentPageSize};
+
       }
     },
     methods: {
+      rowShown(index){
+        Logger.info(`attempting to see if row with index ${index} should be shown`);
+        Logger.info(`row shown: ${index >= this.tableBounds.lower && index <= this.tableBounds.upper}`);
+        return index >= this.tableBounds.lower && index <= this.tableBounds.upper
+      },
       onPagination(data){
         Logger.info(`table pagination event recieved`);
         Logger.info(`data recieved: ${JSON.stringify(data)}`);
+        this.currentTablePage = data.page;
+        this.currentPageSize = data.size;
       },
       async checkAddress() {
         Logger.info(`check address button clicked`);
