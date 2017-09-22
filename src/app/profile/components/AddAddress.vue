@@ -16,12 +16,9 @@
   import * as Logger from 'loglevel';
   import {mapGetters} from 'vuex';
   import GeocodedForm from '@/app/components/GeocodedForm';
-  import MdButton from '../../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
 
-  const mapAPIKey = require('../../../../config/private').mapsApiKey;
   export default {
     components: {
-      MdButton,
       GeocodedForm
     },
     name: 'add_address',
@@ -51,8 +48,7 @@
     computed: {
       mapButtonText() {
         return this.mapShown ? 'Hide Map' : 'Show Map'
-      },
-      ...mapGetters(['getCountryNames'])
+      }
     },
     methods: {
       setCheckedAddress(addressDetails){
@@ -66,7 +62,7 @@
       acceptAddress(){
         Logger.info(`accept address clicked`);
         //here i will probably move the selected address to the store, as I now have its context.
-        //this should also return to its calling function,
+        //this should also return to its calling function, or emit this address if the component is to be embedded
       },
       rejectAddress(){
         Logger.info(`reject address clicked`);

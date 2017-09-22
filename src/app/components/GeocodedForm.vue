@@ -30,17 +30,6 @@
           </md-option>
         </md-select>
       </md-input-container>
-      <!--<p v-if="selectAddressFromListShown">
-        We found {{possibleAddresses.length}} possible addresses, please select one</p>
-      <md-input-container v-if="selectAddressFromListShown">
-        <label for="selectAddress">Select your address</label>
-        <md-select name="selectAddress" id="selectAddress" v-model="chosenAddress">
-          <md-option v-for="currentAddress in possibleAddresses" :key="currentAddress.formatted_address"
-                     :value="JSON.stringify(currentAddress.formatted_address)">
-            {{currentAddress.formatted_address}}
-          </md-option>
-        </md-select>
-      </md-input-container>-->
       <div class="form-flex-container--button">
         <md-button class="md-raised md-accent" type="button" v-if="!formattedAddressShown" @click.native="checkAddress"
                    :disabled="!checkAddressButtonEnabled">Check Address
@@ -49,7 +38,7 @@
       </div>
     </form>
     <div v-if="addressTableShown">
-      <md-button class="md-raised md-warn" @click.native="returnToForm">Re-enter address</md-button>
+      <!--<md-button class="md-raised md-warn" @click.native="returnToForm">Re-enter address</md-button>
       <md-table-card>
         <md-toolbar>
           <h1 class="md-title">Possible Addresses</h1>
@@ -73,8 +62,8 @@
           :md-page-options="[5, 10, 25, 50]"
           @pagination="onPagination"
         ></custom-table-pagination>
-      </md-table-card>
-
+      </md-table-card>-->
+      <select-address-table :possibleAddresses="possibleAddresses" @addressSelectedFromTable="itemSelected"></select-address-table>
     </div>
     <div v-if="formattedAddressShown">
       <p class="md-subtitle">Is this the address you would like to add?</p>
@@ -98,10 +87,12 @@
   import {geocodeAddress} from '@/app/services/geocoding';
   import MdInkRipple from '../../../node_modules/vue-material/src/core/components/mdInkRipple/mdInkRipple.vue';
   import MdButton from '../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
+  import SelectAddressTable from './SelectAddressTable.vue';
 
 
   export default {
     components: {
+      SelectAddressTable,
       MdButton,
       MdInkRipple,
       customTablePagination},
@@ -154,17 +145,9 @@
         return true;
       },
       tableBounds(){
-        //fixme remove irrelevent logic and store result for logging, rather than computing twice
         Logger.info(`testing the current view bounds for table`);
-        /*if(this.currentTablePage === 1){
-          Logger.info(`on first page`);
-          Logger.info(`any item with index between 0 and ${this.currentPageSize -1} should be shown`);
-          return {upper: this.currentPageSize - 1, lower: 0}
-        }
-        Logger.info(`not first page`);*/
         Logger.info(`any item with index between ${((this.currentPageSize * this.currentTablePage)) - this.currentPageSize} and ${(this.currentPageSize * this.currentTablePage) -1} should be shown`);
         return {upper: (this.currentPageSize * this.currentTablePage) -1, lower: ((this.currentPageSize * this.currentTablePage)) - this.currentPageSize};
-
       }
     },
     methods: {
@@ -173,6 +156,7 @@
         this.addressTableShown = false;
       },
       itemSelected(item){
+        item = JSON.parse(item);
         Logger.info(`selected address is: ${item.formatted_address}`);
         this.chosenAddress.googleDetails = item;
         this.googleFormattedAddress      = item.formatted_address;
@@ -247,13 +231,11 @@
           }
         };
         Logger.info(`now formatted details are ${JSON.stringify(this.chosenAddress.formattedDetails)}`);
-        //fixme somewhere between the log statement above and the emit below, all properties of the object are lost
         //possibly becuase the form data gets cleared, and thus the reference to the data?
         //try this:https://forum.vuejs.org/t/passing-data-back-to-parent/1201/2
         //possibly try constructuing a new object from the properties of the old.
         //object needed to be stringified first
         this.$emit('addressSet', JSON.stringify(this.chosenAddress.formattedDetails));//using this.$emit to emit back up component hierarchy, instead of along a bus
-        //fixme hide result and emit selected address to parent.
         this.resetForm();
 
       },
@@ -262,7 +244,6 @@
         this.formattedAddressShown = false;
         bus.$emit('showSnack', 'please adjust your search parameters and try again')
       }
-      //fixme implement logic to handle multiple addresses being returned from the server
 
     }
   }
