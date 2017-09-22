@@ -63,7 +63,7 @@
           @pagination="onPagination"
         ></custom-table-pagination>
       </md-table-card>-->
-      <select-address-table :possibleAddresses="possibleAddresses" @addressSelectedFromTable="itemSelected"></select-address-table>
+      <select-address-table :possibleAddresses="possibleAddresses" @addressSelectedFromTable="itemSelected" @returnToForm="returnToForm"></select-address-table>
     </div>
     <div v-if="formattedAddressShown">
       <p class="md-subtitle">Is this the address you would like to add?</p>
@@ -154,6 +154,7 @@
       returnToForm(){
         this.showAddressForm = true;
         this.addressTableShown = false;
+        this.formattedAddressShown = false;
       },
       itemSelected(item){
         item = JSON.parse(item);

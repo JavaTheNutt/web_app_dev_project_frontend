@@ -10,7 +10,7 @@
     <md-table>
       <md-table-body>
         <md-table-row v-for="(address, index) in possibleAddresses" :key="index" :md-item="address" v-if="rowShown(index)" @click.native="itemSelected(address)">
-          <md-table-cell :md-numeric="false" ><mdInkRipple />{{address.formatted_address}}</md-table-cell>
+          <md-table-cell :md-numeric="false" ><md-ink-ripple ></md-ink-ripple>{{address.formatted_address}}</md-table-cell>
         </md-table-row>
       </md-table-body>
     </md-table>
@@ -28,8 +28,11 @@
 <script>
   import * as Logger from 'loglevel';
   import customTablePagination from './CustomTablePagination';
+  import MdInkRipple from '../../../node_modules/vue-material/src/core/components/mdInkRipple/mdInkRipple.vue';
   export default {
-    components:{customTablePagination},
+    components:{
+      MdInkRipple,
+      customTablePagination},
     name: 'select-address-table',
     props:['possibleAddresses'],
     data(){
