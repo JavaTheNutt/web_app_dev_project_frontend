@@ -209,7 +209,11 @@
         this.formattedAddressShown = false;
         bus.$emit('showSnack', 'please adjust your search parameters and try again')
       }
-    }
+    }/*,
+    beforeDestroy(){
+      Logger.info(`form container being removed from the view. Resetting current form state`);
+      this.$store.dispatch('a_resetFormToInitial');
+    }*/
   }
 </script>
 <style scoped lang="scss">

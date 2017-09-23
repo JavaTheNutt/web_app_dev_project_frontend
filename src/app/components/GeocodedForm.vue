@@ -43,54 +43,65 @@
   import {mapGetters} from 'vuex';
   import * as Logger from 'loglevel';
   import _ from 'lodash';
-  export default{
+
+  export default {
     name: 'geocoded_form',
-    computed:{
+    computed: {
       ...mapGetters(['getCountryNames', 'addAddressValues']),
       checkAddressButtonEnabled() { //this function will watch to see if the check address button should be enabled
-        if(this.sendableAddress.address1.length < 1){
+        if (this.sendableAddress.address1.length < 1) {
           Logger.info(`address1 does not exist`);
           return false;
         }
-        if(this.sendableAddress.country.length < 1){
+        if (this.sendableAddress.country.length < 1) {
           Logger.info(`country does not exist`);
           return false;
         }
         return true;
       }
     },
-    data(){
-      return{
+    data() {
+      return {
         sendableAddress: {
           address1: '',
           address2: '',
           address3: '',
-          country:''
+          country: ''
         }
       }
     },
-    methods:{
+    methods: {
       //fixme currently, if the user inputs an address, checks it and then returns to the form, the form is empty
       //      need to pass props down when component is added to the dom to ensure that the fields remain filled
-      submitData(){
+      submitData() {
         Logger.info(`submit clicked on add address form`);
-        Logger.info(`data to be submitted: ${JSON.stringify(this.getAddressAsObject())}`);
+        Logger.info(`data to be submitted: ${JSON.stringify(this.sendableAddress)}`);
         this.$store.dispatch('a_setAddAddressFormValues', this.sendableAddress);
-        this.$emit('addressSelected', JSON.stringify(this.getAddressAsObject()));
+        this.$emit('addressSelected', JSON.stringify(this.sendableAddress));
       },
-      getAddressAsObject(){
-        return{
-          address1: this.sendableAddress.address1,
-          address2: this.sendableAddress.address2,
-          address3: this.sendableAddress.address3,
-          country: this.sendableAddress.country
-        }
+
+      resetForm() {
+        //found at: https://stackoverflow.com/a/40856312/4108556 resets data object to initial
+        this.$store.dispatch('a_resetFormToInitial');
+        Object.assign(this.$data, this.$options.data.call(this));
+        //found at: https://github.com/baianat/vee-validate/issues/285 iterate through all fields that have validators attached and find the
+        this.$nextTick(function () {
+          const self = this;
+          Object.keys(this.fields).some(function (key) {
+            self.$validator.flag(key, {
+              untouched: true
+            })
+          });
+          this.errors.clear();
+        });
       }
     },
-    mounted(){
+    mounted() {
+      //need to set local state to the last state of the form
+      //https://stackoverflow.com/a/44834961/4108556
       let initalAddressValues = this.$store.getters.getAddAddressValues;
       Logger.info(`initial values retrieved from the store are: ${JSON.stringify(initalAddressValues)}`);
-      if(!initalAddressValues || _.isEmpty(initalAddressValues)){
+      if (!initalAddressValues || _.isEmpty(initalAddressValues)) {
         Logger.info(`no initial values found, fallback to default  values`);
         return;
       }
@@ -98,28 +109,7 @@
       this.sendableAddress.address1 = initalAddressValues.address1;
       this.sendableAddress.address2 = initalAddressValues.address2;
       this.sendableAddress.address3 = initalAddressValues.address3;
-      this.sendableAddress.country = initalAddressValues.country;
-      /*Logger.info(`Initial values for mounted component: ${JSON.stringify(this.initialValues)}`);
-      if(!this.initialValues || _.isEmpty(this.initialValues)){
-        Logger.info(`no props passed, no setup needed`);
-        return;
-      }
-      if(this.initalValues.address1){
-        Logger.info(`setting address 1`);
-        this.sendableAddress.address1 = this.initalValues.address1;
-      }
-      if(this.initialValues.address2){
-        Logger.info(`setting address 2`);
-        this.sendableAddress.address2 = this.initalValues.address2;
-      }
-      if(this.initialValues.address3){
-        Logger.info(`setting address 3`);
-        this.sendableAddress.address3 = this.initalValues.address2;
-      }
-      if(this.initialValues.country){
-        Logger.info(`setting country`);
-        this.sendableAddress.country = this.initalValues.country;
-      }*/
+      this.sendableAddress.country  = initalAddressValues.country;
     }
   }
 </script>

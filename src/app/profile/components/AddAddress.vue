@@ -50,6 +50,10 @@
         return this.mapShown ? 'Hide Map' : 'Show Map'
       }
     },
+    beforeDestroy(){
+      Logger.info(`form container being removed from the view. Resetting current form state`);
+      this.$store.dispatch('a_resetFormToInitial');
+    },
     methods: {
       setCheckedAddress(addressDetails){
         const details = JSON.parse(addressDetails);
