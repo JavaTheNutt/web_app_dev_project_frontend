@@ -44,11 +44,12 @@
   import * as Logger from 'loglevel';
   import _ from 'lodash';
   import types from '../vuex/types';
+  import countryTypes from '@/app/store/countries/types'
 
   export default {
     name: 'geocoded_form',
     computed: {
-      ...mapGetters(['getCountryNames']),
+      ...mapGetters({getCountryNames: countryTypes.getters.getCountryNames}),
       checkAddressButtonEnabled() { //this function will watch to see if the check address button should be enabled
         if (this.sendableAddress.address1.length < 1) {
           Logger.info(`address1 does not exist`);

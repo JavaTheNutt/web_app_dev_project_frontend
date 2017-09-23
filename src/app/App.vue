@@ -29,6 +29,7 @@
   import Login from './components/Login'
   import authTypes from './store/auth/types'
   import connectionTypes from './store/connection/types';
+  import countryTypes from './store/countries/types';
 //fixme
   export default {
     components: {
@@ -57,7 +58,7 @@
       Logger.info(`main app mounted`);
       this.$store.dispatch(authTypes.actions.a_setAuthStateListener);
       this.$store.dispatch(connectionTypes.actions.a_attachOnlineStateListeners);
-      this.$store.dispatch('a_setCountryNames');
+      this.$store.dispatch(countryTypes.actions.a_setCountryNames);
     }
   }
 </script>
