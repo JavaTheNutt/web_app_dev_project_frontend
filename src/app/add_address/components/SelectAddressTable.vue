@@ -28,7 +28,7 @@
 <script>
   import * as Logger from 'loglevel';
   import customTablePagination from './CustomTablePagination';
-  import MdInkRipple from '../../../node_modules/vue-material/src/core/components/mdInkRipple/mdInkRipple.vue';
+  import MdInkRipple from '../../../../node_modules/vue-material/src/core/components/mdInkRipple/mdInkRipple.vue';
   export default {
     components:{
       MdInkRipple,

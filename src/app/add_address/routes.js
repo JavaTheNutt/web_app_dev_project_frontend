@@ -1,7 +1,7 @@
-/*import * as components from './components';
+import * as components from './components';
 
-export default[{
+export default [{
   name: 'add_address',
   path: '/add_address',
   component: components.AddAddress
-}]*/
+}]

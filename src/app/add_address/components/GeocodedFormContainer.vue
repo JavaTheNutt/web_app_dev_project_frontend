@@ -60,7 +60,7 @@
 <script>
   import * as Logger from 'loglevel';
   import {mapGetters} from 'vuex';
-  import bus from '../services/bus';
+  import bus from '../../services/bus';
   import {geocodeAddress} from '@/app/services/geocoding';
   import SelectAddressTable from './SelectAddressTable.vue';
   import GeocodedForm from './GeocodedForm';
@@ -77,12 +77,6 @@
       return {
         showAddressForm: true,
         formattedAddressShown: false,
-        sendableAddress: {
-          country: '',
-          address1: '',
-          address2: '',
-          address3: ''
-        },
         chosenAddress: {
           googleDetails: {},
           formattedDetails: {
@@ -106,7 +100,6 @@
       }
     },
     computed: {
-      ...mapGetters(['getCountryNames']), //fetch country names from the store.
       checkAddressButtonEnabled() { //this function will watch to see if the check address button should be enabled
         if(this.sendableAddress.address1.length < 1){
           Logger.info(`address1 does not exist`);
@@ -172,6 +165,7 @@
       resetForm() {
         //found at: https://stackoverflow.com/a/40856312/4108556 resets data object to initial
         this.showAddressForm = true;
+        this.$store.dispatch('a_resetFormToInitial');
         Object.assign(this.$data, this.$options.data.call(this));
         //found at: https://github.com/baianat/vee-validate/issues/285 iterate through all fields that have validators attached and find the
         this.$nextTick(function () {
@@ -209,11 +203,7 @@
         this.formattedAddressShown = false;
         bus.$emit('showSnack', 'please adjust your search parameters and try again')
       }
-    }/*,
-    beforeDestroy(){
-      Logger.info(`form container being removed from the view. Resetting current form state`);
-      this.$store.dispatch('a_resetFormToInitial');
-    }*/
+    }
   }
 </script>
 <style scoped lang="scss">
