@@ -46,7 +46,7 @@
   export default{
     name: 'geocoded_form',
     computed:{
-      ...mapGetters(['getCountryNames']),
+      ...mapGetters(['getCountryNames', 'addAddressValues']),
       checkAddressButtonEnabled() { //this function will watch to see if the check address button should be enabled
         if(this.sendableAddress.address1.length < 1){
           Logger.info(`address1 does not exist`);
@@ -75,6 +75,7 @@
       submitData(){
         Logger.info(`submit clicked on add address form`);
         Logger.info(`data to be submitted: ${JSON.stringify(this.getAddressAsObject())}`);
+        this.$store.dispatch('a_setAddAddressFormValues', this.sendableAddress);
         this.$emit('addressSelected', JSON.stringify(this.getAddressAsObject()));
       },
       getAddressAsObject(){
@@ -85,9 +86,20 @@
           country: this.sendableAddress.country
         }
       }
-    }/*,
+    },
     mounted(){
-      Logger.info(`Initial values for mounted component: ${JSON.stringify(this.initialValues)}`);
+      let initalAddressValues = this.$store.getters.getAddAddressValues;
+      Logger.info(`initial values retrieved from the store are: ${JSON.stringify(initalAddressValues)}`);
+      if(!initalAddressValues || _.isEmpty(initalAddressValues)){
+        Logger.info(`no initial values found, fallback to default  values`);
+        return;
+      }
+      Logger.info(`initial values found, setting values to data`);
+      this.sendableAddress.address1 = initalAddressValues.address1;
+      this.sendableAddress.address2 = initalAddressValues.address2;
+      this.sendableAddress.address3 = initalAddressValues.address3;
+      this.sendableAddress.country = initalAddressValues.country;
+      /*Logger.info(`Initial values for mounted component: ${JSON.stringify(this.initialValues)}`);
       if(!this.initialValues || _.isEmpty(this.initialValues)){
         Logger.info(`no props passed, no setup needed`);
         return;
@@ -107,7 +119,7 @@
       if(this.initialValues.country){
         Logger.info(`setting country`);
         this.sendableAddress.country = this.initalValues.country;
-      }
-    }*/
+      }*/
+    }
   }
 </script>
