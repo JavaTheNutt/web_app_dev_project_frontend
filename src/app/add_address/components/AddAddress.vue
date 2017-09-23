@@ -16,6 +16,7 @@
   import * as Logger from 'loglevel';
   import {mapGetters} from 'vuex';
   import GeocodedForm from './GeocodedFormContainer';
+  import types from '../vuex/types';
 
   export default {
     components: {
@@ -52,7 +53,7 @@
     },
     beforeDestroy(){
       Logger.info(`form container being removed from the view. Resetting current form state`);
-      this.$store.dispatch('a_resetFormToInitial');
+      this.$store.dispatch(types.actions.a_resetFormToInitial);
     },
     methods: {
       setCheckedAddress(addressDetails){

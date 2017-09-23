@@ -1,42 +1,5 @@
 <template>
   <div>
-    <!--<form novalidate @submit.stop.prevent="submitForm" v-if="showAddressForm">
-      <md-input-container :class="{'md-input-invalid': errors.has('address1')}">
-        <label>Address Line One</label>
-        <md-input type="text" v-model="sendableAddress.address1" data-vv-name="address1" v-validate="'required'"
-                  name="address1"
-        ></md-input>
-        <span
-          class="md-error">Address Line One is mandatory</span>
-      </md-input-container>
-      <md-input-container>
-        <label>Address Line Two</label>
-        <md-input type="text" v-model="sendableAddress.address2"
-                  name="address2"
-        ></md-input>
-      </md-input-container>
-      <md-input-container>
-        <label>Address Line Three</label>
-        <md-input type="text" v-model="sendableAddress.address3"
-                  name="address3"
-        ></md-input>
-      </md-input-container>
-      <md-input-container>
-        <label for="country">Select Country</label>
-        <md-select name="country" id="country" v-model="sendableAddress.country">
-          <md-option v-for="currentCountry in getCountryNames" :key="currentCountry"
-                     :value="JSON.stringify(currentCountry)">
-            {{currentCountry}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-      <div class="form-flex-container&#45;&#45;button">
-        <md-button class="md-raised md-accent" type="button" v-if="!formattedAddressShown" @click.native="checkAddress"
-                   :disabled="!checkAddressButtonEnabled">Check Address
-        </md-button>
-        <md-button class="md-raised md-warn" type="button" @click.native="resetForm">Reset</md-button>
-      </div>
-    </form>-->
     <div v-if="showAddressForm">
       <geocoded-form @addressSelected="checkAddress"></geocoded-form>
     </div>
@@ -64,6 +27,7 @@
   import {geocodeAddress} from '@/app/services/geocoding';
   import SelectAddressTable from './SelectAddressTable.vue';
   import GeocodedForm from './GeocodedForm';
+  import types from '../vuex/types';
 
 
   export default {
@@ -165,7 +129,7 @@
       resetForm() {
         //found at: https://stackoverflow.com/a/40856312/4108556 resets data object to initial
         this.showAddressForm = true;
-        this.$store.dispatch('a_resetFormToInitial');
+        this.$store.dispatch(types.actions.a_resetFormToInitial);
         Object.assign(this.$data, this.$options.data.call(this));
         //found at: https://github.com/baianat/vee-validate/issues/285 iterate through all fields that have validators attached and find the
         this.$nextTick(function () {

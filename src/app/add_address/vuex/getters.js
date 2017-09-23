@@ -1,5 +1,6 @@
+import types from './types';
 export default {
-  getAddAddressValues(state){
+  [types.getters.getAddAddressValues](state){
     return state.addAddressValues;
   }
 }

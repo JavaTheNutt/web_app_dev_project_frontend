@@ -4,7 +4,7 @@
   "description": "Vue2 frontend for final year Web Application Development. A finance tracker application",
   "author": "joe.wemyss<joe.wemyss@javathenutt.com>",
   "private": true,
-  "repository":{
+  "repository": {
     "type": "git",
     "url": "https://github.com/JavaTheNutt/web_app_dev_project_frontend"
   },
@@ -25,6 +25,7 @@
     "country-list": "^1.1.0",
     "firebase": "^4.3.1",
     "localforage": "^1.5.0",
+    "lodash": "^4.17.4",
     "loglevel": "^1.4.1",
     "vee-validate": "^2.0.0-rc.14",
     "vue": "^2.3.3",
