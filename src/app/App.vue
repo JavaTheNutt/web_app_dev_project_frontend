@@ -28,6 +28,7 @@
   import Navigation from './components/Nav';
   import Login from './components/Login'
   import authTypes from './store/auth/types'
+  import connectionTypes from './store/connection/types';
 //fixme
   export default {
     components: {
@@ -43,7 +44,7 @@
     },
     computed:{
       ...mapGetters({
-        getConnection : 'getConnection', loggedIn: authTypes.getters.loggedIn})
+        getConnection : connectionTypes.getters.getConnection, loggedIn: authTypes.getters.loggedIn})
     },
     created() {
       bus.$on('showSnack', (message) => {
@@ -55,7 +56,7 @@
     mounted() {
       Logger.info(`main app mounted`);
       this.$store.dispatch(authTypes.actions.a_setAuthStateListener);
-      this.$store.dispatch('a_attachOnlineStateListeners');
+      this.$store.dispatch(connectionTypes.actions.a_attachOnlineStateListeners);
       this.$store.dispatch('a_setCountryNames');
     }
   }

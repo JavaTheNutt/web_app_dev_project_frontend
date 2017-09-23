@@ -1,5 +1,6 @@
+import types from './types';
 export default {
-  getConnection(state){
+  [types.getters.getConnection](state){
     return state.hasConnection;
   }
 }
