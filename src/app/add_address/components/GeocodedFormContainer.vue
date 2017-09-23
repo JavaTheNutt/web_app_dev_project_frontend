@@ -129,7 +129,7 @@
       resetForm() {
         //found at: https://stackoverflow.com/a/40856312/4108556 resets data object to initial
         this.showAddressForm = true;
-        this.$store.dispatch(types.actions.a_resetFormToInitial);
+        this.$store.dispatch(types.actions.a_resetFormValues);
         Object.assign(this.$data, this.$options.data.call(this));
         //found at: https://github.com/baianat/vee-validate/issues/285 iterate through all fields that have validators attached and find the
         this.$nextTick(function () {

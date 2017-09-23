@@ -1,5 +1,5 @@
 export default {
-  addAddressValues: {
+  formValues: {
     address1: '',
     address2: '',
     address3: '',

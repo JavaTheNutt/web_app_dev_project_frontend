@@ -53,7 +53,7 @@
     },
     beforeDestroy(){
       Logger.info(`form container being removed from the view. Resetting current form state`);
-      this.$store.dispatch(types.actions.a_resetFormToInitial);
+      this.$store.dispatch(types.actions.a_resetFormValues);
     },
     methods: {
       setCheckedAddress(addressDetails){

@@ -77,13 +77,13 @@
       submitData() {
         Logger.info(`submit clicked on add address form`);
         Logger.info(`data to be submitted: ${JSON.stringify(this.sendableAddress)}`);
-        this.$store.dispatch(types.actions.a_setAddAddressFormValues, this.sendableAddress);
+        this.$store.dispatch(types.actions.a_setFormValues, this.sendableAddress);
         this.$emit('addressSelected', JSON.stringify(this.sendableAddress));
       },
 
       resetForm() {
         //found at: https://stackoverflow.com/a/40856312/4108556 resets data object to initial
-        this.$store.dispatch();
+        this.$store.dispatch(types.actions.a_resetFormValues);
         Object.assign(this.$data, this.$options.data.call(this));
         //found at: https://github.com/baianat/vee-validate/issues/285 iterate through all fields that have validators attached and find the
         this.$nextTick(function () {
@@ -100,7 +100,7 @@
     mounted() {
       //need to set local state to the last state of the form
       //https://stackoverflow.com/a/44834961/4108556
-      let initalAddressValues = this.$store.getters[types.getters.getAddAddressValues];
+      let initalAddressValues = this.$store.getters[types.getters.getValues];
       Logger.info(`initial values retrieved from the store are: ${JSON.stringify(initalAddressValues)}`);
       if (!initalAddressValues || _.isEmpty(initalAddressValues)) {
         Logger.info(`no initial values found, fallback to default  values`);
