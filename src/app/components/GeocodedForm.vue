@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form novalidate @submit.stop.prevent="submitForm" v-if="showAddressForm">
+    <form novalidate @submit.stop.prevent="submitForm">
       <md-input-container :class="{'md-input-invalid': errors.has('address1')}">
         <label>Address Line One</label>
         <md-input type="text" v-model="sendableAddress.address1" data-vv-name="address1" v-validate="'required'"
@@ -31,71 +31,22 @@
         </md-select>
       </md-input-container>
       <div class="form-flex-container--button">
-        <md-button class="md-raised md-accent" type="button" v-if="!formattedAddressShown" @click.native="checkAddress"
+        <md-button class="md-raised md-accent" type="button" @click.native="submitData"
                    :disabled="!checkAddressButtonEnabled">Check Address
         </md-button>
         <md-button class="md-raised md-warn" type="button" @click.native="resetForm">Reset</md-button>
       </div>
     </form>
-    <div v-if="addressTableShown">
-      <select-address-table :possibleAddresses="possibleAddresses" @addressSelectedFromTable="itemSelected" @returnToForm="returnToForm"></select-address-table>
-    </div>
-    <div v-if="formattedAddressShown">
-      <p class="md-subtitle">Is this the address you would like to add?</p>
-      <p class="md-subtitle">{{googleFormattedAddress}}</p>
-      <md-button md-theme="buttons" class="md-raised md-accent md-icon-button" @click.native="acceptSelectedAddress"
-                 type="button">
-        <md-icon>done</md-icon>
-      </md-button>
-      <md-button class="md-raised md-accent md-icon-button" type="button" @click.native="rejectSelectedAddress">
-        <md-icon>clear</md-icon>
-      </md-button>
-    </div>
-
   </div>
 </template>
 <script>
-  import * as Logger from 'loglevel';
   import {mapGetters} from 'vuex';
-  import bus from '../services/bus';
-  import {geocodeAddress} from '@/app/services/geocoding';
-  import SelectAddressTable from './SelectAddressTable.vue';
-
-
-  export default {
-    components: {
-      SelectAddressTable
-    },
+  import * as Logger from 'loglevel';
+  import _ from 'lodash';
+  export default{
     name: 'geocoded_form',
-
-    data() {
-      return {
-        showAddressForm: true,
-        formattedAddressShown: false,
-        sendableAddress: {
-          country: '',
-          address1: '',
-          address2: '',
-          address3: ''
-        },
-        chosenAddress: {
-          googleDetails: {},
-          formattedDetails: {
-            googlePlaceId: '',
-            formattedName: '',
-            geometry: {
-              lat: 0.0,
-              lng: 0.0
-            }
-          }
-        },
-        possibleAddresses: [],
-        googleFormattedAddress: '',
-        addressTableShown: false,
-      }
-    },
-    computed: {
-      ...mapGetters(['getCountryNames']), //fetch country names from the store.
+    computed:{
+      ...mapGetters(['getCountryNames']),
       checkAddressButtonEnabled() { //this function will watch to see if the check address button should be enabled
         if(this.sendableAddress.address1.length < 1){
           Logger.info(`address1 does not exist`);
@@ -108,93 +59,55 @@
         return true;
       }
     },
-    methods: {
-      returnToForm(){
-        this.showAddressForm = true;
-        this.addressTableShown = false;
-        this.formattedAddressShown = false;
-      },
-      itemSelected(item){
-        item = JSON.parse(item);
-        Logger.info(`selected address is: ${item.formatted_address}`);
-        this.chosenAddress.googleDetails = item;
-        this.googleFormattedAddress      = item.formatted_address;
-        this.formattedAddressShown       = true;
-      },
-      async checkAddress() {
-        Logger.info(`check address button clicked`);
-        try {
-          const fetchedResults = await geocodeAddress(this.sendableAddress);
-          Logger.info(`results fetched from geocode without error.`);
-          Logger.info(`results: ${JSON.stringify(fetchedResults)}`);
-          Logger.info(`attempting to handle the results of the fetch operation`);
-          this.handleAddress(fetchedResults.data.results)
-        } catch (err) {
-          Logger.warn(`there was an error thrown in the on click handler for checking an address`);
-          Logger.error(`error details: ${JSON.stringify(err)}`);
+    data(){
+      return{
+        sendableAddress: {
+          address1: '',
+          address2: '',
+          address3: '',
+          country:''
         }
-      },
-      handleAddress(addressList) {
-        Logger.info(`handling results of query`);
-        if (addressList.length === 1) {
-          Logger.info(`there was exactly one result returned`);
-          bus.$emit('showSnack', 'exactly one address found');
-          this.possibleAddresses           = [];
-          this.chosenAddress.googleDetails = addressList[0];
-          this.googleFormattedAddress      = addressList[0].formatted_address;
-          this.formattedAddressShown       = true;
-        }
-        if (addressList.length > 1) {
-          bus.$emit('showSnack', 'multiple addresses found');
-          this.googleFormattedAddress = null;
-          this.possibleAddresses      = addressList;
-          this.addressTableShown = true;
-          this.showAddressForm = false;
-        }
-      },
-      resetForm() {
-        //found at: https://stackoverflow.com/a/40856312/4108556 resets data object to initial
-        this.showAddressForm = true;
-        Object.assign(this.$data, this.$options.data.call(this));
-        //found at: https://github.com/baianat/vee-validate/issues/285 iterate through all fields that have validators attached and find the
-        this.$nextTick(function () {
-          const self = this;
-          Object.keys(this.fields).some(function (key) {
-            self.$validator.flag(key, {
-              untouched: true
-            })
-          });
-          this.errors.clear();
-        });
-      },
-      acceptSelectedAddress() {
-        Logger.info(`accept selected address clicked`);
-        Logger.info(`currently selected address: ${JSON.stringify(this.chosenAddress.googleDetails)}`);
-        this.chosenAddress.formattedDetails = {
-          googlePlaceId: this.chosenAddress.googleDetails.place_id,
-          formattedAddress: this.chosenAddress.googleDetails.formatted_address,
-          geometry: {
-            lat: this.chosenAddress.googleDetails.geometry.location.lat,
-            lng: this.chosenAddress.googleDetails.geometry.location.lng,
-          }
-        };
-        Logger.info(`now formatted details are ${JSON.stringify(this.chosenAddress.formattedDetails)}`);
-        //possibly becuase the form data gets cleared, and thus the reference to the data?
-        //try this:https://forum.vuejs.org/t/passing-data-back-to-parent/1201/2
-        //possibly try constructuing a new object from the properties of the old.
-        //object needed to be stringified first
-        this.$emit('addressSet', JSON.stringify(this.chosenAddress.formattedDetails));//using this.$emit to emit back up component hierarchy, instead of along a bus
-        this.resetForm();
-
-      },
-      rejectSelectedAddress() {
-        this.chosenAddress         = {};
-        this.formattedAddressShown = false;
-        bus.$emit('showSnack', 'please adjust your search parameters and try again')
       }
-    }
+    },
+    methods:{
+      //fixme currently, if the user inputs an address, checks it and then returns to the form, the form is empty
+      //      need to pass props down when component is added to the dom to ensure that the fields remain filled
+      submitData(){
+        Logger.info(`submit clicked on add address form`);
+        Logger.info(`data to be submitted: ${JSON.stringify(this.getAddressAsObject())}`);
+        this.$emit('addressSelected', JSON.stringify(this.getAddressAsObject()));
+      },
+      getAddressAsObject(){
+        return{
+          address1: this.sendableAddress.address1,
+          address2: this.sendableAddress.address2,
+          address3: this.sendableAddress.address3,
+          country: this.sendableAddress.country
+        }
+      }
+    }/*,
+    mounted(){
+      Logger.info(`Initial values for mounted component: ${JSON.stringify(this.initialValues)}`);
+      if(!this.initialValues || _.isEmpty(this.initialValues)){
+        Logger.info(`no props passed, no setup needed`);
+        return;
+      }
+      if(this.initalValues.address1){
+        Logger.info(`setting address 1`);
+        this.sendableAddress.address1 = this.initalValues.address1;
+      }
+      if(this.initialValues.address2){
+        Logger.info(`setting address 2`);
+        this.sendableAddress.address2 = this.initalValues.address2;
+      }
+      if(this.initialValues.address3){
+        Logger.info(`setting address 3`);
+        this.sendableAddress.address3 = this.initalValues.address2;
+      }
+      if(this.initialValues.country){
+        Logger.info(`setting country`);
+        this.sendableAddress.country = this.initalValues.country;
+      }
+    }*/
   }
 </script>
-<style scoped lang="scss">
-
-</style>

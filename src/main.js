@@ -43,7 +43,6 @@ Vue.material.registerTheme({
   'buttons':{
     primary: 'indigo',
     accent: 'green'
-
   }
 });
 

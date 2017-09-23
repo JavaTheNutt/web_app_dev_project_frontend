@@ -15,7 +15,7 @@
   import bus from '../../services/bus';
   import * as Logger from 'loglevel';
   import {mapGetters} from 'vuex';
-  import GeocodedForm from '@/app/components/GeocodedForm';
+  import GeocodedForm from '@/app/components/GeocodedFormContainer';
 
   export default {
     components: {

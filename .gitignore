@@ -16,3 +16,5 @@ selenium-debug.log
 *.sln
 /config/private.js
 /format.js
+/help.vue
+/help1.vue
