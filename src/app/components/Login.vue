@@ -31,6 +31,7 @@
 <script>
   import bus from '../services/bus';
   import * as Logger from 'loglevel';
+  import types from '@/app/store/auth/types';
 
   export default {
     components: {},
@@ -51,7 +52,7 @@
           return;
         }
         Logger.info(`form is valid`);
-        this.$store.dispatch('a_logInUser', {email: this.userEmail,password: this.userPassword});
+        this.$store.dispatch(types.actions.a_logInUser, {email: this.userEmail,password: this.userPassword});
         this.$router.push('/');
       }
     },

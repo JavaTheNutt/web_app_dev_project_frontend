@@ -1,3 +1,4 @@
+import types from './types';
 export default {
-  loggedIn: state => {return state.loggedIn}
+  [types.getters.loggedIn]: state => {return state.loggedIn}
 }

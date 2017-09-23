@@ -33,14 +33,16 @@
 </template>
 <script>
   import * as Logger from 'loglevel';
-  import {mapState, mapGetters} from 'vuex';
+  //import {createNamespacedHelpers} from 'vuex';
+  import {mapGetters} from 'vuex';
+  import authTypes from '@/app/store/auth/types';
   //fixme need to fix link styling in side nav bar
   export default {
     name: 'navigation',
     computed: {
-      ...mapGetters([
-        'loggedIn'
-      ])
+      ...mapGetters({
+        loggedIn: authTypes.getters.loggedIn
+      })
     },
     methods: {
       toggleLeftSidenav() {
