@@ -11,13 +11,5 @@ export default {
     Logger.info(`log out mutation called`);
     state.loggedIn = false;
 
-  },
-  [types.mutations.m_setNewUser](state){
-    Logger.info(`mutation called to determine new user`);
-    state.isNewUser = true;
-  },
-  [types.mutations.m_setReturningUser](state){
-    Logger.info(`mutation called to set returning user`);
-    state.isNewUser = false;
   }
 }

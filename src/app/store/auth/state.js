@@ -1,4 +1,3 @@
 export default {
-  loggedIn: false,
-  isNewUser: false
+  loggedIn: false
 }

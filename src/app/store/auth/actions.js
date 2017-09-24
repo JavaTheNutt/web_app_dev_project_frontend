@@ -6,12 +6,11 @@ import types from './types';
 import router from '@/router';
 
 export default {
-  [types.actions.a_logInUser]: async ({dispatch, commit}, user) => {
+  [types.actions.a_logInUser]: async ({dispatch}, user) => {
     Logger.info(`login user action attempting to sign in`);
     Logger.info(`user: ${JSON.stringify(user)}`);
     try {
       let currentUser = await firebase.auth().signInWithEmailAndPassword(user.email, user.password);
-      commit(types.mutations.m_isReturningUser);
       Logger.info(`user signed into firebase without error`);
     } catch (err) {
       Logger.error(`error while using firebase auth`);
@@ -25,10 +24,9 @@ export default {
     Logger.info(`current user: ${JSON.stringify(currentUser)}`);
     if (currentUser) {
       Logger.info(`user logged in`);
-      return commit(types.mutations.m_logInUser); //fixme bring in mutations
+      return commit(types.mutations.m_logInUser);
     }
     Logger.info(`user not logged in`);
-    commit(types.mutations.m_setReturningUser);
     router.push('/');
     return commit(types.mutations.m_logOutUser);
   },
@@ -37,7 +35,6 @@ export default {
       Logger.info(`sign up function called in Firebase service`);
       await firebase.auth().createUserWithEmailAndPassword(details.email, details.password);
       Logger.info(`user appears correctly created`);
-      commit(types.mutations.m_setNewUser);
     } catch (err) {
       Logger.warn(`error creating firebase account`);
       bus.$emit('showSnack', handleFirebaseError(err.code))
