@@ -159,8 +159,6 @@
         //possibly try constructuing a new object from the properties of the old.
         //object needed to be stringified first
         this.$emit('addressSet', JSON.stringify(this.chosenAddress.formattedDetails));//using this.$emit to emit back up component hierarchy, instead of along a bus
-        this.resetForm();
-
       },
       rejectSelectedAddress() {
         this.chosenAddress         = {};
