@@ -2,7 +2,8 @@
 
 <template>
   <div>
-    <h1 class="md-title">Please login to use this service</h1>
+    <h1 class="md-title">Please {{labelText}} to use this service</h1>
+    <md-switch v-model="isSignUp" id="isSignUp" name="isSignUp">Sign up</md-switch>
     <form novalidate @submit.stop.prevent="submitForm">
       <div class="form-flex-container">
         <div class="form-flex-container--field">
@@ -21,6 +22,14 @@
             <span class="md-error">Password is required</span>
           </md-input-container>
         </div>
+        <div class="form-flex-container--field" v-if="isSignUp">
+          <md-input-container :class="{'md-input-invalid': errors.has('confirmPassword')}" mdHasPassword>
+            <label>Confirm Password</label>
+            <md-input type="password" v-model="confirmPassword" data-vv-name="confirmPassword" v-validate="'required|confirmed:password'" name="confirmPassword"
+                       ref="confirmPasswordField"></md-input>
+            <span class="md-error">Passwords must match</span>
+          </md-input-container>
+        </div>
         <div class="form-flex-container--button">
           <md-button class="md-raised md-accent" type="submit">Submit</md-button>
         </div>
@@ -32,14 +41,17 @@
   import bus from '../services/bus';
   import * as Logger from 'loglevel';
   import types from '@/app/store/auth/types';
+  import MdSwitch from '../../../node_modules/vue-material/src/components/mdSwitch/mdSwitch.vue';
 
   export default {
-    components: {},
+    components: {MdSwitch},
     name: 'login',
     data() {
       return {
         userEmail: '',
-        userPassword: ''
+        userPassword: '',
+        confirmPassword: '',
+        isSignUp: false
       }
     },
     methods: {
@@ -52,8 +64,15 @@
           return;
         }
         Logger.info(`form is valid`);
-        this.$store.dispatch(types.actions.a_logInUser, {email: this.userEmail,password: this.userPassword});
-        this.$router.push('/');
+        const action = this.isSignUp ? types.actions.a_createNewUser : types.actions.a_logInUser;
+        this.$store.dispatch(action, {email: this.userEmail,password: this.userPassword});
+        //fixme, should wait until operation is successfull
+        //this.$router.push('/');
+      }
+    },
+    computed:{
+      labelText(){
+        return this.isSignUp ? 'sign up': 'login';
       }
     },
     mounted(){

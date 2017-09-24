@@ -63,7 +63,7 @@
       },
       triggerLogOut() {
         Logger.info(`log out ui triggered, dispatching logout event`);
-        this.$store.dispatch('a_logOutUser');
+        this.$store.dispatch(authTypes.actions.a_logOutUser);
         this.$router.push('/')
       }
     }
