@@ -18,8 +18,8 @@
         <md-list-item @click.native="$refs.leftSidenav.close();redirect('/')" class="side-nav--list-item">
           <p class="side-nav--link">Home</p>
         </md-list-item>
-        <md-list-item @click.native="$refs.leftSidenav.close();redirect('/signup')" v-if="!loggedIn">
-          <p class="side-nav--link">Signup</p>
+        <md-list-item @click.native="$refs.leftSidenav.close();redirect('/profile')" v-if="loggedIn">
+          <p class="side-nav--link">Profile</p>
         </md-list-item>
         <md-list-item @click.native="$refs.leftSidenav.close();redirect('/add_address')" v-if="loggedIn">
           <p class="side-nav--link">Add Address</p>

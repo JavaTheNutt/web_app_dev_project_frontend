@@ -1,1 +1,1 @@
-export {default as AddAddress} from './AddAddress';
+export {default as Profile} from './Profile';
