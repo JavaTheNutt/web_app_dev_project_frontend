@@ -14,7 +14,7 @@ export default {
       Logger.info(`user signed into firebase without error`);
     } catch (err) {
       Logger.error(`error while using firebase auth`);
-      bus.$emit(handleFirebaseError(err.code))
+      bus.$emit(handleFirebaseError(err.code));
     }
     dispatch(types.actions.a_testCurrentAuthState);
   },
@@ -35,6 +35,7 @@ export default {
       Logger.info(`sign up function called in Firebase service`);
       await firebase.auth().createUserWithEmailAndPassword(details.email, details.password);
       Logger.info(`user appears correctly created`);
+      router.push({ name: 'profile', query: {isEdit:true}});
     } catch (err) {
       Logger.warn(`error creating firebase account`);
       bus.$emit('showSnack', handleFirebaseError(err.code))

@@ -5,7 +5,15 @@
         <md-icon>menu</md-icon>
       </md-button>
       <h2 class="md-title" style="flex:1">Home Resource Planner</h2>
-      <!--<md-button class="md-raised md-accent" @click.native="goLogin" v-if="!loggedIn">Login</md-button>-->
+      <md-menu v-if="loggedIn">
+        <md-button class="md-icon-button" md-menu-trigger>
+          <md-icon md-iconset="fa fa-ellipsis-v"></md-icon>
+        </md-button>
+        <md-menu-content>
+          <md-menu-item @click.native="redirect('/profile')">Profile</md-menu-item>
+          <md-menu-item @click.native="triggerLogOut">Logout</md-menu-item>
+        </md-menu-content>
+      </md-menu>
     </md-toolbar>
     <md-card></md-card>
     <md-sidenav class="md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')">
@@ -18,15 +26,6 @@
         <md-list-item @click.native="$refs.leftSidenav.close();redirect('/')" class="side-nav--list-item">
           <p class="side-nav--link">Home</p>
         </md-list-item>
-        <md-list-item @click.native="$refs.leftSidenav.close();redirect('/profile')" v-if="loggedIn">
-          <p class="side-nav--link">Profile</p>
-        </md-list-item>
-        <md-list-item @click.native="$refs.leftSidenav.close();redirect('/add_address')" v-if="loggedIn">
-          <p class="side-nav--link">Add Address</p>
-        </md-list-item>
-        <md-list-item @click.native="$refs.leftSidenav.close();triggerLogOut()" v-if="loggedIn">
-          <p class="side-nav--link">Logout</p>
-        </md-list-item>
       </md-list>
     </md-sidenav>
   </div>
@@ -35,8 +34,18 @@
   import * as Logger from 'loglevel';
   import {mapGetters} from 'vuex';
   import authTypes from '@/app/store/auth/types';
+  import MdIcon from '../../../node_modules/vue-material/src/components/mdIcon/mdIcon.vue';
+  import MdMenu from '../../../node_modules/vue-material/src/components/mdMenu/mdMenu.vue';
+  import MdMenuContent from '../../../node_modules/vue-material/src/components/mdMenu/mdMenuContent.vue';
+  import MdMenuItem from '../../../node_modules/vue-material/src/components/mdMenu/mdMenuItem.vue';
   //fixme need to fix link styling in side nav bar
   export default {
+    components: {
+      MdMenuItem,
+      MdMenuContent,
+      MdMenu,
+      MdIcon
+    },
     name: 'navigation',
     computed: {
       ...mapGetters({
