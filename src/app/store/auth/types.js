@@ -1,7 +1,7 @@
 import namespace from '@/app/services/namespace';
 
 export default namespace('auth', {
-  getters:['loggedIn'],
+  getters:['loggedIn', 'isNewUser'],
   actions: ['a_logInUser', 'a_testCurrentAuthState', 'a_createNewUser', 'a_logOutUser', 'a_setAuthStateListener'],
-  mutations:['m_logInUser', 'm_logOutUser']
+  mutations:['m_logInUser', 'm_logOutUser', 'm_setNewUser', 'm_setReturningUser']
 })
