@@ -33,7 +33,6 @@
 </template>
 <script>
   import * as Logger from 'loglevel';
-  //import {createNamespacedHelpers} from 'vuex';
   import {mapGetters} from 'vuex';
   import authTypes from '@/app/store/auth/types';
   //fixme need to fix link styling in side nav bar
@@ -64,7 +63,6 @@
       triggerLogOut() {
         Logger.info(`log out ui triggered, dispatching logout event`);
         this.$store.dispatch(authTypes.actions.a_logOutUser);
-        this.$router.push('/')
       }
     }
   }

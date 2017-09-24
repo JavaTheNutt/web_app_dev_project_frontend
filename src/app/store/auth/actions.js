@@ -3,6 +3,7 @@ import * as Logger from 'loglevel';
 import firebase from 'firebase';
 import bus from '../../services/bus';
 import types from './types';
+import router from '@/router';
 
 export default {
   [types.actions.a_logInUser]: async ({dispatch, commit}, user) => {
@@ -28,6 +29,7 @@ export default {
     }
     Logger.info(`user not logged in`);
     commit(types.mutations.m_setReturningUser);
+    router.push('/');
     return commit(types.mutations.m_logOutUser);
   },
   [types.actions.a_createNewUser]: async ({commit}, details) => {
