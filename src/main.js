@@ -4,6 +4,7 @@ import Vue from 'vue'
 import VueMaterial from 'vue-material';
 import VeeValidate from 'vee-validate';
 import * as VueGoogleMaps from 'vue2-google-maps';
+import {sync} from 'vuex-router-sync';
 import 'vue-material/dist/vue-material.css'
 
 import {App} from './app'
@@ -20,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   log.setLevel('trace');
 }
-
+const unsync = sync(store, router, {moduleName: 'router_store'});
 firebase.initializeApp(privateConfig.firebase);
 
 Vue.config.productionTip = false;
