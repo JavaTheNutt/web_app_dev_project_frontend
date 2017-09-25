@@ -4,29 +4,22 @@
     <geocoded-form @addressSet="setCheckedAddress" v-if="formShown"></geocoded-form>
     <div v-if="mapShown">
       <confirm_fab @accept="acceptAddress" @reject="rejectAddress"></confirm_fab>
-      <!--
-      <md-button md-theme="secondary" class="md-raised md-accent md-icon-button" @click.native="acceptAddress"
-                 type="button">
-        <md-icon>done</md-icon>
-      </md-button>
-      <md-button class="md-raised md-warn md-icon-button" type="button" @click.native="rejectAddress">
-        <md-icon>clear</md-icon>
-      </md-button>
-&lt;!&ndash;      <md-button class="md-raised md-accent" @click.native="acceptAddress">Accept</md-button>
-      <md-button class="md-raised md-warn" @click.native="rejectAddress">Reject</md-button>&ndash;&gt;
-    --></div>
-    <div v-if="mapShown" class="map-container"><gmap-map :center="{lat:chosenAddress.geometry.lat, lng:chosenAddress.geometry.lng}" :zoom="20" map-type-id="terrain" class="custom-view-map" >
-      <gmap-marker :position="chosenAddress.geometry"></gmap-marker>
-    </gmap-map></div>
+    </div>
+    <div v-if="mapShown" class="map-container">
+      <gmap-map :center="{lat:chosenAddress.geometry.lat, lng:chosenAddress.geometry.lng}" :zoom="20"
+                map-type-id="terrain" class="custom-view-map">
+        <gmap-marker :position="chosenAddress.geometry"></gmap-marker>
+      </gmap-map>
+    </div>
   </div>
 </template>
 <script>
-  import bus from '../../services/bus';
+  import bus from '@/app/services/bus';
   import * as Logger from 'loglevel';
   import {mapGetters} from 'vuex';
   import GeocodedForm from './GeocodedFormContainer';
   import types from '../vuex/types';
-  import Confirm_fab from '../../widgets/confirm_fab/ConfirmFab.vue';
+  import Confirm_fab from '@/app/widgets/confirm_fab/ConfirmFab';
 
   export default {
     components: {
@@ -62,29 +55,29 @@
         return this.mapShown ? 'Hide Map' : 'Show Map'
       }
     },
-    beforeDestroy(){
+    beforeDestroy() {
       Logger.info(`form container being removed from the view. Resetting current form state`);
       this.$store.dispatch(types.actions.a_resetFormValues);
     },
     methods: {
-      setCheckedAddress(addressDetails){
+      setCheckedAddress(addressDetails) {
         const details = JSON.parse(addressDetails);
         Logger.info(`address event recived from child component`);
         Logger.info(`details passed: ${JSON.stringify(addressDetails)}`);
         this.chosenAddress = details;
-        this.formShown = false;
-        this.mapShown = true;
+        this.formShown     = false;
+        this.mapShown      = true;
       },
-      acceptAddress(){
+      acceptAddress() {
         Logger.info(`accept address clicked`);
         //here i will probably move the selected address to the store, as I now have its context.
         //this should also return to its calling function, or emit this address if the component is to be embedded
       },
-      rejectAddress(){
+      rejectAddress() {
         Logger.info(`reject address clicked`);
         this.chosenAddress = null;
-        this.mapShown = false;
-        this.formShown = true;
+        this.mapShown      = false;
+        this.formShown     = true;
       }
     }
   }
