@@ -1,5 +1,5 @@
 <template>
-  <div><md-button class="md-raised md-primary" @click.native="returnToForm">Re-enter address</md-button>
+  <div><md-button class="md-raised md-accent" @click.native="returnToForm">Re-enter address</md-button>
   <md-table-card>
     <md-toolbar>
       <h1 class="md-title">Possible Addresses</h1>
