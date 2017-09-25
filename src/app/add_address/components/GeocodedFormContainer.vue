@@ -9,13 +9,14 @@
     <div v-if="formattedAddressShown">
       <p class="md-subtitle">Is this the address you would like to add?</p>
       <p class="md-subtitle">{{googleFormattedAddress}}</p>
-      <md-button md-theme="buttons" class="md-raised md-accent md-icon-button" @click.native="acceptSelectedAddress"
+      <!--<md-button md-theme="secondary" class="md-raised md-accent md-icon-button" @click.native="acceptSelectedAddress"
                  type="button">
         <md-icon>done</md-icon>
       </md-button>
-      <md-button class="md-raised md-accent md-icon-button" type="button" @click.native="rejectSelectedAddress">
+      <md-button class="md-raised md-warn md-icon-button" type="button" @click.native="rejectSelectedAddress">
         <md-icon>clear</md-icon>
-      </md-button>
+      </md-button>-->
+      <confirm_fab @accept="acceptSelectedAddress" @reject="rejectSelectedAddress"></confirm_fab>
     </div>
 
   </div>
@@ -28,10 +29,12 @@
   import SelectAddressTable from './SelectAddressTable.vue';
   import GeocodedForm from './GeocodedForm';
   import types from '../vuex/types';
+  import Confirm_fab from '../../widgets/confirm_fab/ConfirmFab.vue';
 
 
   export default {
     components: {
+      Confirm_fab,
       SelectAddressTable,
       GeocodedForm
     },

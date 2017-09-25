@@ -3,12 +3,21 @@
     <h1 class="md-title">This is the add address view</h1>
     <geocoded-form @addressSet="setCheckedAddress" v-if="formShown"></geocoded-form>
     <div v-if="mapShown">
-      <md-button class="md-raised md-accent" @click.native="acceptAddress">Accept</md-button>
-      <md-button class="md-raised md-warn" @click.native="rejectAddress">Reject</md-button>
-    </div>
-    <gmap-map :center="{lat:chosenAddress.geometry.lat, lng:chosenAddress.geometry.lng}" :zoom="20" map-type-id="terrain" class="custom-view-map" v-if="mapShown">
+      <confirm_fab @accept="acceptAddress" @reject="rejectAddress"></confirm_fab>
+      <!--
+      <md-button md-theme="secondary" class="md-raised md-accent md-icon-button" @click.native="acceptAddress"
+                 type="button">
+        <md-icon>done</md-icon>
+      </md-button>
+      <md-button class="md-raised md-warn md-icon-button" type="button" @click.native="rejectAddress">
+        <md-icon>clear</md-icon>
+      </md-button>
+&lt;!&ndash;      <md-button class="md-raised md-accent" @click.native="acceptAddress">Accept</md-button>
+      <md-button class="md-raised md-warn" @click.native="rejectAddress">Reject</md-button>&ndash;&gt;
+    --></div>
+    <div v-if="mapShown" class="map-container"><gmap-map :center="{lat:chosenAddress.geometry.lat, lng:chosenAddress.geometry.lng}" :zoom="20" map-type-id="terrain" class="custom-view-map" >
       <gmap-marker :position="chosenAddress.geometry"></gmap-marker>
-    </gmap-map>
+    </gmap-map></div>
   </div>
 </template>
 <script>
@@ -17,9 +26,11 @@
   import {mapGetters} from 'vuex';
   import GeocodedForm from './GeocodedFormContainer';
   import types from '../vuex/types';
+  import Confirm_fab from '../../widgets/confirm_fab/ConfirmFab.vue';
 
   export default {
     components: {
+      Confirm_fab,
       GeocodedForm
     },
     name: 'add_address',
@@ -81,7 +92,7 @@
 </script>
 <style scoped lang="scss">
   .map-container {
-    display: flex;
+    margin: 30px 0;
   }
 
   .custom-view-map {

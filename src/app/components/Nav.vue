@@ -40,7 +40,7 @@
   import MdMenu from '../../../node_modules/vue-material/src/components/mdMenu/mdMenu.vue';
   import MdMenuContent from '../../../node_modules/vue-material/src/components/mdMenu/mdMenuContent.vue';
   import MdMenuItem from '../../../node_modules/vue-material/src/components/mdMenu/mdMenuItem.vue';
-  import defaultProfilePic from '@/assets/Default_Profile_Picture.svg';
+  import defaultProfilePic from '@/assets/defaultProf.png';
   //fixme need to fix link styling in side nav bar
   export default {
     data(){

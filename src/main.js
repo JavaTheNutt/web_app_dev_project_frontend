@@ -36,14 +36,15 @@ Vue.use(VueGoogleMaps, {
 Vue.prototype.$http = axios; //switch to axios since vue-resource is no longer the recommended http client
 Vue.material.registerTheme({
   'default': {
-    primary: 'blue-grey',
-    accent: 'red',
-    warn: 'orange',
+    primary: 'blue',
+    accent: 'pink',
+    warn: 'red',
     backgroud: 'grey'
   },
-  'buttons':{
+  'secondary':{
     primary: 'indigo',
-    accent: 'green'
+    accent: 'green',
+    warn: 'orange'
   }
 });
 

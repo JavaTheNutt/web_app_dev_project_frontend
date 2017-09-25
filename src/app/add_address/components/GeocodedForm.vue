@@ -1,7 +1,7 @@
 <template>
   <div>
     <form novalidate @submit.stop.prevent="submitForm">
-      <md-input-container :class="{'md-input-invalid': errors.has('address1')}">
+      <md-input-container :class="{'md-input-invalid': errors.has('address1')}" required>
         <label>Address Line One</label>
         <md-input type="text" v-model="sendableAddress.address1" data-vv-name="address1" v-validate="'required'"
                   name="address1"
@@ -23,7 +23,7 @@
       </md-input-container>
       <md-input-container>
         <label for="country">Select Country</label>
-        <md-select name="country" id="country" v-model="sendableAddress.country">
+        <md-select name="country" id="country" v-model="sendableAddress.country" required>
           <md-option v-for="currentCountry in getCountryNames" :key="currentCountry"
                      :value="JSON.stringify(currentCountry)">
             {{currentCountry}}
@@ -31,10 +31,10 @@
         </md-select>
       </md-input-container>
       <div class="form-flex-container--button">
-        <md-button class="md-raised md-accent" type="button" @click.native="submitData"
+        <md-button class="md-raised md-primary" type="button" @click.native="submitData"
                    :disabled="!checkAddressButtonEnabled">Check Address
         </md-button>
-        <md-button class="md-raised md-warn" type="button" @click.native="resetForm">Reset</md-button>
+        <md-button class="md-raised md-accent" type="button" @click.native="resetForm" :disabled="!formHasValues">Reset</md-button>
       </div>
     </form>
   </div>
@@ -60,6 +60,12 @@
           return false;
         }
         return true;
+      },
+      formHasValues(){
+        Logger.info(`recalculating form values`);
+        const hasValues = this.sendableAddress.address1.length > 1 || this.sendableAddress.address2.length > 1 || this.sendableAddress.address3.length > 1 || this.sendableAddress.country.length > 1;
+        Logger.info(`form hasvaleus result is: ${hasValues}`);
+        return hasValues;
       }
     },
     data() {
