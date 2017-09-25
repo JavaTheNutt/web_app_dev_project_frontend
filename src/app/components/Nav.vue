@@ -10,10 +10,12 @@
           <md-icon md-iconset="fa fa-ellipsis-v"></md-icon>
         </md-button>
         <md-menu-content>
-          <md-menu-item @click.native="redirect('/profile')">Profile</md-menu-item>
           <md-menu-item @click.native="triggerLogOut">Logout</md-menu-item>
         </md-menu-content>
       </md-menu>
+      <md-avatar @click.native="redirect('/profile')" class="nav-avatar" v-if="loggedIn">
+        <img :src="picSrc" alt="Profile Picture">
+      </md-avatar>
     </md-toolbar>
     <md-card></md-card>
     <md-sidenav class="md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')">
@@ -38,8 +40,14 @@
   import MdMenu from '../../../node_modules/vue-material/src/components/mdMenu/mdMenu.vue';
   import MdMenuContent from '../../../node_modules/vue-material/src/components/mdMenu/mdMenuContent.vue';
   import MdMenuItem from '../../../node_modules/vue-material/src/components/mdMenu/mdMenuItem.vue';
+  import defaultProfilePic from '@/assets/Default_Profile_Picture.svg';
   //fixme need to fix link styling in side nav bar
   export default {
+    data(){
+      return {
+        picSrc: defaultProfilePic
+      }
+    },
     components: {
       MdMenuItem,
       MdMenuContent,
@@ -82,6 +90,9 @@
   }
 
   .side-nav--list-item {
+    cursor: pointer;
+  }
+  .nav-avatar{
     cursor: pointer;
   }
 </style>
