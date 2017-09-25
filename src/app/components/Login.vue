@@ -66,8 +66,6 @@
         Logger.info(`form is valid`);
         const action = this.isSignUp ? types.actions.a_createNewUser : types.actions.a_logInUser;
         this.$store.dispatch(action, {email: this.userEmail,password: this.userPassword});
-        //fixme, should wait until operation is successfull
-        //this.$router.push('/');
       }
     },
     computed:{

@@ -73,8 +73,6 @@
       }
     },
     methods: {
-      //fixme currently, if the user inputs an address, checks it and then returns to the form, the form is empty
-      //      need to pass props down when component is added to the dom to ensure that the fields remain filled
       submitData() {
         Logger.info(`submit clicked on add address form`);
         Logger.info(`data to be submitted: ${JSON.stringify(this.sendableAddress)}`);

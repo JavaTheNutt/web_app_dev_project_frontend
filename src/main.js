@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   log.setLevel('trace');
 }
-const unsync = sync(store, router, {moduleName: 'router_store'});
+/*const unsync =*/ sync(store, router, {moduleName: 'router_store'}); //set up syncing, store callback for teardown if nessecary
 firebase.initializeApp(privateConfig.firebase);
 
 Vue.config.productionTip = false;

@@ -4,7 +4,7 @@
       <md-button class="md-icon-button" @click="toggleLeftSidenav">
         <md-icon>menu</md-icon>
       </md-button>
-      <h2 class="md-title" style="flex:1">Home Resource Planner</h2>
+      <h2 class="md-title" style="flex:1">Finance Tracker</h2>
       <md-menu v-if="loggedIn">
         <md-button class="md-icon-button" md-menu-trigger>
           <md-icon md-iconset="fa fa-ellipsis-v"></md-icon>
