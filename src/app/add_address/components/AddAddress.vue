@@ -4,6 +4,7 @@
     <!--<router-view @addressSet="setCheckedAddress"></router-view>-->
     <!--<geocoded-form @addressSet="setCheckedAddress" v-if="formShown"></geocoded-form>-->
     <router-view></router-view>
+    <confirm-text @accept="acceptAddress" @reject="rejectAddress" :messages="messages" v-if="messages"></confirm-text>
     <!--<div v-if="mapShown">
       <confirm_fab @accept="acceptAddress" @reject="rejectAddress"></confirm_fab>
     </div>
@@ -21,11 +22,11 @@
   import {mapGetters} from 'vuex';
   import GeocodedForm from './GeocodedFormContainer';
   import types from '../vuex/types';
-  import Confirm_fab from '@/app/widgets/confirm_fab/ConfirmFab';
+  import ConfirmText from '@/app/widgets/confirm_text/ConfirmText';
 
   export default {
     components: {
-      Confirm_fab,
+      ConfirmText,
       GeocodedForm
     },
     name: 'add_address',
@@ -53,9 +54,10 @@
       Logger.info(`user does not have geo`);
     },
     computed: {
-      mapButtonText() {
-        return this.mapShown ? 'Hide Map' : 'Show Map'
-      }
+      messages() {
+        return Object.keys(this.selectedAddress).length > 0 ? ['Is this the address that you would like to choose?', this.selectedAddress.text] : false;
+      },
+      ...mapGetters({selectedAddress: types.getters.getSelectedAddress})
     },
     beforeDestroy() {
       Logger.info(`form container being removed from the view. Resetting current form state`);

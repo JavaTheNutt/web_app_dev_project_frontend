@@ -11,7 +11,7 @@
 </template>
 <script>
   export default {
-    name: 'confirm_fab',
+    name: 'confirm-fab',
     methods:{
       accept(){
         this.$emit('accept');
