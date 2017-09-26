@@ -20,5 +20,9 @@ export default{
       address3: '',
       country: ''
     }
+  },
+  [types.mutations.m_setSelectedAddress](state, {selectedAddress}){
+    Logger.info(`request to set selected address`);
+    state.selectedAddress = selectedAddress;
   }
 }

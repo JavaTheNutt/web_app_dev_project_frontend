@@ -10,7 +10,7 @@
     <md-table>
       <md-table-body>
         <md-table-row v-for="(address, index) in possibleAddresses" :key="index" :md-item="address" v-if="rowShown(index)" @click.native="itemSelected(address)">
-          <md-table-cell :md-numeric="false" ><md-ink-ripple ></md-ink-ripple>{{address.formatted_address}}</md-table-cell>
+          <md-table-cell :md-numeric="false" ><md-ink-ripple ></md-ink-ripple>{{address.text}}</md-table-cell>
         </md-table-row>
       </md-table-body>
     </md-table>
@@ -46,8 +46,9 @@
         //this.$emit('returnToForm');
       },
       itemSelected(item){
-        Logger.info(`selected address is: ${item.formatted_address}`);
-        this.$emit('addressSelectedFromTable', JSON.stringify(item))
+        Logger.info(`selected address is: ${item.text}`);
+        //this.$emit('addressSelectedFromTable', JSON.stringify(item))
+        this.$store.dispatch(types.actions.a_setSelectedAddress, item);
       },
       rowShown(index){
         Logger.info(`attempting to see if row with index ${index} should be shown`);

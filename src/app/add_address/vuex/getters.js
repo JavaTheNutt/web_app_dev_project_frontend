@@ -4,6 +4,11 @@ export default {
     return state.formValues;
   },
   [types.getters.getPossibleAddresses](state){
-    return state.possibleAddresses;
+    return state.possibleAddresses.map((address)=>{
+      return {geo: address.geometry.location, text: address.formatted_address}
+    });
+  },
+  [types.getters.getSelectedAddress](state){
+    return state.selectedAddress;
   }
 }

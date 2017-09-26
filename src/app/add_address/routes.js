@@ -7,7 +7,7 @@ export default [{
   redirect: '/add_address/enter_details',
   children:[{
     path:'enter_details',
-    component: components.GeocodedForm
+    component: components.GeocodedForm,
   }, {
     path: 'select_details',
     component: components.SelectAddressTable

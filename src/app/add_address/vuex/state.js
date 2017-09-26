@@ -5,5 +5,6 @@ export default {
     address3: '',
     country: ''
   },
-  possibleAddresses:[]
+  possibleAddresses:[],
+  selectedAddress: {}
 }
