@@ -1,8 +1,9 @@
 <template>
   <div>
     <h1 class="md-title">This is the add address view</h1>
+    <!--<router-view @addressSet="setCheckedAddress"></router-view>-->
     <geocoded-form @addressSet="setCheckedAddress" v-if="formShown"></geocoded-form>
-    <div v-if="mapShown">
+    <!--<div v-if="mapShown">
       <confirm_fab @accept="acceptAddress" @reject="rejectAddress"></confirm_fab>
     </div>
     <div v-if="mapShown" class="map-container">
@@ -10,7 +11,7 @@
                 map-type-id="terrain" class="custom-view-map">
         <gmap-marker :position="chosenAddress.geometry"></gmap-marker>
       </gmap-map>
-    </div>
+    </div>-->
   </div>
 </template>
 <script>

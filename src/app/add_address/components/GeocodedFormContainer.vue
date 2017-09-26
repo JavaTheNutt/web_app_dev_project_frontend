@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div v-if="showAddressForm">
+    <router-view>
+    </router-view>
+    <!--<div v-if="showAddressForm">
       <geocoded-form @addressSelected="checkAddress"></geocoded-form>
     </div>
     <div v-if="addressTableShown">
@@ -9,15 +11,15 @@
     <div v-if="formattedAddressShown">
       <p class="md-subtitle">Is this the address you would like to add?</p>
       <p class="md-subtitle">{{googleFormattedAddress}}</p>
-      <!--<md-button md-theme="secondary" class="md-raised md-accent md-icon-button" @click.native="acceptSelectedAddress"
+      &lt;!&ndash;<md-button md-theme="secondary" class="md-raised md-accent md-icon-button" @click.native="acceptSelectedAddress"
                  type="button">
         <md-icon>done</md-icon>
       </md-button>
       <md-button class="md-raised md-warn md-icon-button" type="button" @click.native="rejectSelectedAddress">
         <md-icon>clear</md-icon>
-      </md-button>-->
+      </md-button>&ndash;&gt;
       <confirm_fab @accept="acceptSelectedAddress" @reject="rejectSelectedAddress"></confirm_fab>
-    </div>
+    </div>-->
 
   </div>
 </template>
