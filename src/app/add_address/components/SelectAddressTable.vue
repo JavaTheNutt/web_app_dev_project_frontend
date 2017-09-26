@@ -14,7 +14,7 @@
         </md-table-row>
       </md-table-body>
     </md-table>
-    <custom-table-pagination
+    <md-table-pagination
       :md-size="currentPageSize"
       md-label="Rows"
       md-seperator="of"
@@ -22,19 +22,21 @@
       :mdTotal="possibleAddresses.length"
       :md-page-options="[5, 10, 25, 50]"
       @pagination="onPagination"
-    ></custom-table-pagination>
+    ></md-table-pagination>
   </md-table-card></div>
 </template>
 <script>
   import * as Logger from 'loglevel';
   import customTablePagination from './CustomTablePagination';
   import MdInkRipple from '../../../../node_modules/vue-material/src/core/components/mdInkRipple/mdInkRipple.vue';
+  import {mapGetters} from 'vuex';
+  import types from '@/app/add_address/vuex/types'
   export default {
     components:{
       MdInkRipple,
       customTablePagination},
     name: 'select-address-table',
-    props:['possibleAddresses'],
+    //props:['possibleAddresses'],
     data(){
       return{
         currentPageSize: 5,
@@ -67,7 +69,10 @@
         Logger.info(`testing the current view bounds for table`);
         Logger.info(`any item with index between ${((this.currentPageSize * this.currentTablePage)) - this.currentPageSize} and ${(this.currentPageSize * this.currentTablePage) -1} should be shown`);
         return {upper: (this.currentPageSize * this.currentTablePage) -1, lower: ((this.currentPageSize * this.currentTablePage)) - this.currentPageSize};
-      }
+      },
+      ...mapGetters({
+        possibleAddresses: types.getters.getPossibleAddresses
+      })
     }
   }
 </script>

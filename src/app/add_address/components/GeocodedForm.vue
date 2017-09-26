@@ -82,9 +82,10 @@
       submitData() {
         Logger.info(`submit clicked on add address form`);
         Logger.info(`data to be submitted: ${JSON.stringify(this.sendableAddress)}`);
-        this.$store.dispatch(types.actions.a_setFormValues, this.sendableAddress);
+        //this.$store.dispatch(types.actions.a_setFormValues, this.sendableAddress);
         this.$emit('addressSelected', JSON.stringify(this.sendableAddress));
-        this.$router.push('/add_address/select_details');
+        this.$store.dispatch(types.actions.a_fetchResults, this.sendableAddress);
+        this.$router.push('/add_address/select_details'); //fixme this should emit the event to the parent and the parent should handle routing
       },
 
       resetForm() {

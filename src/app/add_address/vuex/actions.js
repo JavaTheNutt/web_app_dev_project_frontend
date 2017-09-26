@@ -11,11 +11,12 @@ export default {
     commit(types.mutations.m_resetFormValues)
   },
   [types.actions.a_fetchResults] : async ({commit, dispatch}, address) => {
+    dispatch(types.actions.a_setFormValues, address);
     Logger.info(`action called to fetch geocoded results`);
     try {
       const geocodeResults = await geocodeAddress(address);
       Logger.info(`results assumed fetched`);
-      commit(types.mutations.m_setResults, {data: geocodeResults})
+      commit(types.mutations.m_setResults, {data: geocodeResults.data.results})
     } catch (e) {
       Logger.error(`error fetching results`);
     }

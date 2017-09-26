@@ -56,7 +56,6 @@
             }
           }
         },
-        possibleAddresses: [],
         googleFormattedAddress: '',
         addressTableShown: false,
         recievedDetails: {
@@ -78,7 +77,8 @@
           return false;
         }
         return true;
-      }
+      },
+      ...mapGetters({possibleAddresses: types.getters.getPossibleAddresses})
     },
     methods: {
       returnToForm(){

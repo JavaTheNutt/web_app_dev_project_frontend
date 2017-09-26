@@ -8,8 +8,8 @@ import {sync} from 'vuex-router-sync';
 import 'vue-material/dist/vue-material.css'
 
 import {App} from './app'
-import router from './router'
 import store from './store';
+import router from './router'
 import privateConfig from '../config/private';
 import firebase from 'firebase';
 import * as log from 'loglevel';
@@ -21,7 +21,8 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   log.setLevel('trace');
 }
-/*const unsync =*/ sync(store, router, {moduleName: 'router_store'}); //set up syncing, store callback for teardown if nessecary
+/*const unsync =*/
+sync(store, router, {moduleName: 'router_store'}); //set up syncing, store callback for teardown if nessecary
 firebase.initializeApp(privateConfig.firebase);
 
 Vue.config.productionTip = false;
@@ -41,7 +42,7 @@ Vue.material.registerTheme({
     warn: 'red',
     backgroud: 'grey'
   },
-  'secondary':{
+  'secondary': {
     primary: 'indigo',
     accent: 'green',
     warn: 'orange'
@@ -51,8 +52,8 @@ Vue.material.registerTheme({
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
   store,
+  router,
   template: '<App/>',
   components: {App}
 });
