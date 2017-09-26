@@ -42,7 +42,7 @@
     methods:{
       returnToForm(){
         Logger.info(`return to form clicked`);
-        
+        this.$store.dispatch(types.actions.a_resetSelectedAddress);
         this.$router.go(-1);
         //this.$emit('returnToForm');
       },

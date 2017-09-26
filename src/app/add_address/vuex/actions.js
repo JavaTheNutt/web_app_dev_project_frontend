@@ -25,6 +25,10 @@ export default {
   [types.actions.a_setSelectedAddress]: ({commit}, selectedAddress) => {
     Logger.info(`action called to set requested address`);
     commit(types.mutations.m_setSelectedAddress, {selectedAddress})
+  },
+  [types.actions.a_resetSelectedAddress]:({commit}) =>{
+    Logger.info(`action called to reset selected address`);
+    commit(types.mutations.m_setSelectedAddress, {selectedAddress: {}})
   }
 }
 
