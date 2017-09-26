@@ -10,6 +10,6 @@ export default [{
     component: components.GeocodedForm
   }, {
     path: 'select_details',
-    component: ''
+    component: components.SelectAddressTable
   }]
 }]

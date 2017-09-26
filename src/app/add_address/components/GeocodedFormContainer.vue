@@ -1,7 +1,6 @@
 <template>
   <div>
-    <router-view>
-    </router-view>
+    <router-view></router-view>
     <!--<div v-if="showAddressForm">
       <geocoded-form @addressSelected="checkAddress"></geocoded-form>
     </div>

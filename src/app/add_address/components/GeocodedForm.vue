@@ -84,6 +84,7 @@
         Logger.info(`data to be submitted: ${JSON.stringify(this.sendableAddress)}`);
         this.$store.dispatch(types.actions.a_setFormValues, this.sendableAddress);
         this.$emit('addressSelected', JSON.stringify(this.sendableAddress));
+        this.$router.push('/add_address/select_details');
       },
 
       resetForm() {
