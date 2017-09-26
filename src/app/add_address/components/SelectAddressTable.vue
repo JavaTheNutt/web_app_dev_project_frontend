@@ -27,14 +27,10 @@
 </template>
 <script>
   import * as Logger from 'loglevel';
-  import customTablePagination from './CustomTablePagination';
-  import MdInkRipple from '../../../../node_modules/vue-material/src/core/components/mdInkRipple/mdInkRipple.vue';
   import {mapGetters} from 'vuex';
   import types from '@/app/add_address/vuex/types'
   export default {
-    components:{
-      MdInkRipple,
-      customTablePagination},
+    components:{},
     name: 'select-address-table',
     //props:['possibleAddresses'],
     data(){
@@ -46,7 +42,8 @@
     methods:{
       returnToForm(){
         Logger.info(`return to form clicked`);
-        this.$emit('returnToForm');
+        this.$router.go(-1);
+        //this.$emit('returnToForm');
       },
       itemSelected(item){
         Logger.info(`selected address is: ${item.formatted_address}`);

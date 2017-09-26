@@ -2,7 +2,8 @@
   <div>
     <h1 class="md-title">This is the add address view</h1>
     <!--<router-view @addressSet="setCheckedAddress"></router-view>-->
-    <geocoded-form @addressSet="setCheckedAddress" v-if="formShown"></geocoded-form>
+    <!--<geocoded-form @addressSet="setCheckedAddress" v-if="formShown"></geocoded-form>-->
+    <router-view></router-view>
     <!--<div v-if="mapShown">
       <confirm_fab @accept="acceptAddress" @reject="rejectAddress"></confirm_fab>
     </div>
