@@ -8,6 +8,10 @@ export default{
     state.formValues.address3 = data.address3 || '';
     state.formValues.country = data.country || '';
   },
+  [types.mutations.m_setResults](state, {data}){
+    Logger.info(`mutation recieved to add geocode results to state`);
+    state.possibleAddresses = data;
+  },
   [types.mutations.m_resetFormValues](state){
     Logger.info(`request to mutate form state back to  initial`);
     state.formValues  = {
