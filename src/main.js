@@ -14,7 +14,7 @@ import privateConfig from '../config/private';
 import firebase from 'firebase';
 import * as log from 'loglevel';
 import axios from 'axios';
-
+import * as Logger from 'loglevel';
 require('../node_modules/vue-material/dist/vue-material.css');
 if (process.env.NODE_ENV === 'production') {
   log.setLevel('silent');
@@ -48,7 +48,14 @@ Vue.material.registerTheme({
     warn: 'orange'
   }
 });
-
+router.beforeEach((to, from, next)=>{
+  if(store.state.auth.loggedIn){
+    Logger.info(`user logged in`);
+    return next();
+  }
+  Logger.info(`user not logged in`);
+  return next();
+});
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
