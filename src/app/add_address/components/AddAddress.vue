@@ -55,14 +55,17 @@
     },
     computed: {
       messages() {
-        return Object.keys(this.selectedAddress).length > 0 ? ['Is this the address that you would like to choose?', this.selectedAddress.text] : false;
-      },
-      ...mapGetters({selectedAddress: types.getters.getSelectedAddress})
+        return Object.keys(this.selectedAddress).length > 0 ?
+          ['Is this the address that you would like to choose?', this.selectedAddress.text] : false;
+      }, ...mapGetters({
+        selectedAddress: types.getters.getSelectedAddress,
+        possibleAddresses: types.getters.getPossibleAddresses
+      })
     },
-    mounted(){
+    mounted() {
       Logger.info(`current path: ${this.$route.path}`);
       Logger.info(`${this.$route.path.substring(0, this.$route.path.indexOf('/add_address'))}`);
-      this.$store.dispatch(types.actions.a_setRoutePrefix, this.$route.path.substring(0, this.$route.path.indexOf('/add_address')))
+      this.$store.dispatch(types.actions.a_setRoutePrefix, this.$route.path.substring(0, this.$route.path.indexOf('/add_address')));
     },
     beforeDestroy() {
       Logger.info(`form container being removed from the view. Resetting current form state`);

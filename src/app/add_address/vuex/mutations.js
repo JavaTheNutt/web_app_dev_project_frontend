@@ -28,5 +28,9 @@ export default{
   [types.mutations.m_setRoutePrefix](state, {prefix}){
     Logger.info(`request to mutate route prefix for address`);
     state.routePrefix = prefix;
+  },
+  [types.mutations.m_setHasMultipleAddresses](state, {hasMultipleAddresses}){
+    Logger.info(`request to mutate has multiple addresses state`);
+    state.hasMultipleAddresses = hasMultipleAddresses;
   }
 }

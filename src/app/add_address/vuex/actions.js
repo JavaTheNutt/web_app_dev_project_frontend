@@ -17,7 +17,20 @@ export default {
     try {
       const geocodeResults = await geocodeAddress(address);
       Logger.info(`results assumed fetched`);
-      commit(types.mutations.m_setResults, {data: geocodeResults.data.results})
+      if(geocodeResults.data.results.length === 1){
+        Logger.info(`exactly one result returned from geocode operation`);
+        const formattedResults = geocodeResults.data.results.map((address) => {
+          return {
+            geo: address.geometry.location,
+            text: address.formatted_address
+          }
+        });
+        commit(types.mutations.m_setSelectedAddress, {selectedAddress: formattedResults});
+        commit(types.mutations.setResults, {data:[]});
+        return;
+      }
+      commit(types.mutations.m_setResults, {data: geocodeResults.data.results});
+      commit(types.mutations.m_setSelectedAddress, {selectedAddress: {}});
     } catch (e) {
       Logger.error(`error fetching results`);
     }

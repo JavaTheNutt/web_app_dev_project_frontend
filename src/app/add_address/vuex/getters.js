@@ -17,5 +17,8 @@ export default {
   },
   [types.getters.getRoutePrefix](state) {
     return state.routePrefix;
+  },
+  [types.getters.getHasMultipleAddresses](state){
+    return state.possibleAddresses.length > 1;
   }
 }

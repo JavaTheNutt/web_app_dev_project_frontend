@@ -7,5 +7,6 @@ export default {
   },
   possibleAddresses:[],
   selectedAddress: {},
-  routePrefix: ''
+  routePrefix: '',
+  hasMultipleAddresses: false
 }

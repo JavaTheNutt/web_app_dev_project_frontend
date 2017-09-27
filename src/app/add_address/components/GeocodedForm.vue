@@ -85,7 +85,7 @@
         //this.$store.dispatch(types.actions.a_setFormValues, this.sendableAddress);
         this.$emit('addressSelected', JSON.stringify(this.sendableAddress));
         this.$store.dispatch(types.actions.a_fetchResults, this.sendableAddress);
-        this.$router.push(`${this.getRoutePrefix}/add_address/select_details`); //fixme this should emit the event to the parent and the parent should handle routing
+        //this.$router.push(`${this.getRoutePrefix}/add_address/select_details`); //fixme this should emit the event to the parent and the parent should handle routing
       },
 
       resetForm() {
@@ -118,6 +118,35 @@
       this.sendableAddress.address2 = initalAddressValues.address2;
       this.sendableAddress.address3 = initalAddressValues.address3;
       this.sendableAddress.country  = initalAddressValues.country;
+
+      //fixme: the way this is currently being done is awful. needs refactoring
+/*
+      this.$store.subscribe((mutation, state) => {
+        Logger.info(`subscribe called`);
+        if(!mutation.payload || _.isEmpty(mutation.payload)){
+          Logger.info(`empty request mutation detected`);
+          return;
+        }
+        if(mutation.payload.selectedAddress || !_.isEmpty(mutation.payload.selectedAddress)){
+          Logger.info(`selected address payload detected`);
+          return;
+        }
+        if(mutation.payload.possibleAddresses || !_.isEmpty(mutation.payload.possibleAddresses)){
+          Logger.info(`possible address payload detected`);
+          return;
+        }
+        Logger.info(`payload: ${JSON.stringify(mutation.payload)}`);
+        Logger.info(`selected address properties: ${Object.keys(mutation.payload.selectedAddress).length}`);
+        Logger.info(`possible address properties: ${Object.keys(mutation.payload.data).length}`);
+        if (mutation.type === types.mutations.m_setSelectedAddress && Object.keys(mutation.payload.selectedAddress).length < 1) {
+          Logger.info(`mutation is to set a single address and is not empty`);
+        }
+        if(mutation.type === types.mutations.m_setResults && Object.keys(mutation.payload.data).length < 1){
+          Logger.info(`mutation is to set multiple addresses and is not empty`);
+          this.$router.push(`${this.getRoutePrefix}/add_address/select_details`);
+        }
+      })
+*/
     }
   }
 </script>
