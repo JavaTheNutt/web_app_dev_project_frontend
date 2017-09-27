@@ -6,5 +6,6 @@ export default {
     country: ''
   },
   possibleAddresses:[],
-  selectedAddress: {}
+  selectedAddress: {},
+  routePrefix: ''
 }

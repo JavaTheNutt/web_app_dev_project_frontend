@@ -59,6 +59,11 @@
       },
       ...mapGetters({selectedAddress: types.getters.getSelectedAddress})
     },
+    mounted(){
+      Logger.info(`current path: ${this.$route.path}`);
+      Logger.info(`${this.$route.path.substring(0, this.$route.path.indexOf('/add_address'))}`);
+      this.$store.dispatch(types.actions.a_setRoutePrefix, this.$route.path.substring(0, this.$route.path.indexOf('/add_address')))
+    },
     beforeDestroy() {
       Logger.info(`form container being removed from the view. Resetting current form state`);
       this.$store.dispatch(types.actions.a_resetFormValues);

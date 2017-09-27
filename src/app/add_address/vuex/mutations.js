@@ -24,5 +24,9 @@ export default{
   [types.mutations.m_setSelectedAddress](state, {selectedAddress}){
     Logger.info(`request to set selected address`);
     state.selectedAddress = selectedAddress;
+  },
+  [types.mutations.m_setRoutePrefix](state, {prefix}){
+    Logger.info(`request to mutate route prefix for address`);
+    state.routePrefix = prefix;
   }
 }

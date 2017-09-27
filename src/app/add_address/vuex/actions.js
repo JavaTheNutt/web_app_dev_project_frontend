@@ -29,6 +29,14 @@ export default {
   [types.actions.a_resetSelectedAddress]:({commit}) =>{
     Logger.info(`action called to reset selected address`);
     commit(types.mutations.m_setSelectedAddress, {selectedAddress: {}})
+  },
+  [types.actions.a_setRoutePrefix]:({commit}, prefix)=>{
+    Logger.info(`action called to set the route prefix`);
+    commit(types.mutations.m_setRoutePrefix, {prefix});
+  },
+  [types.actions.a_resetRoutePrefix]:({commit})=>{
+    Logger.info(`action called to set the route prefix`);
+    commit(types.mutations.m_setRoutePrefix, {prefix: ''});
   }
 }
 
