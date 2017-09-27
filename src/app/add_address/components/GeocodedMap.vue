@@ -1,12 +1,18 @@
 <template>
   <div  class="map-container">
-    <gmap-map :center="{lat:chosenAddress.geometry.lat, lng:chosenAddress.geometry.lng}" :zoom="20"
-              map-type-id="terrain" class="custom-view-map">
-      <gmap-marker :position="chosenAddress.geometry"></gmap-marker>
-    </gmap-map>
+    <marked-map :markers="[selectedAddress]"></marked-map>
   </div>
 </template>
 <script>
   import * as Logger from 'loglevel';
-
+  import MarkedMap from '@/app/widgets/marked_map/MarkedMap'
+  import {mapGetters} from 'vuex';
+  import types from '@/app/add_address/vuex/types';
+  export default{
+    name: 'geocoded-map',
+    components: {MarkedMap},
+    computed:{
+      ...mapGetters({selectedAddress: types.getters.getSelectedAddress})
+    }
+  }
 </script>

@@ -47,8 +47,12 @@
       }, ...mapGetters({
         selectedAddress: types.getters.getSelectedAddress,
         possibleAddresses: types.getters.getPossibleAddresses,
-        selectedAddressText: types.getters.getSelectedAddressText
-      })
+        selectedAddressText: types.getters.getSelectedAddressText,
+        refPath: types.getters.getRoutePrefix
+      }),
+      currentLocation(){
+        return this.$route.path.substring(this.$route.path.indexOf('/add_address') + '/add_address'.length)
+      }
     },
     mounted() {
       Logger.info(`current path: ${this.$route.path}`);
@@ -62,22 +66,27 @@
     methods: {
       acceptAddress() {
         Logger.info(`accept address clicked`);
+        if(this.currentLocation === '/enter_details' || this.currentLocation === '/select_details'){
+          Logger.info(`address selected while in either form or map, switching to map`);
+          this.$router.push(`${this.refPath}/add_address/view_address`);
+        }
         //here is where i will check the current route and if the form or the table is shown, move to the map. If the map is shown, return to the caller
       },
       rejectAddress() {
         Logger.info(`reject address clicked`);
-        const currentLocation = this.$route.path.substring(this.$route.path.indexOf('/add_address') + '/add_address'.length);
-        Logger.info(`current location: ${currentLocation}`);
-        if (currentLocation === '/enter_details') {
+        //const currentLocation = this.$route.path.substring(this.$route.path.indexOf('/add_address') + '/add_address'.length);
+        Logger.info(`current location: ${this.currentLocation}`);
+        if (this.currentLocation === '/enter_details') {
           Logger.info(`location is form, hiding choice`);
           this.$store.dispatch(types.actions.a_resetSelectedAddress);
           return;
         }
-        if (currentLocation === '/select_details') {
+        if (this.currentLocation === '/select_details' || this.currentLocation === '/view_address') {
           Logger.info(`location is table, returning to form`);
           this.$store.dispatch(types.actions.a_resetSelectedAddress);
           this.$router.go(-1);
         }
+
       }
     }
   }

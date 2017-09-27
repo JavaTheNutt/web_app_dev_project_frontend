@@ -12,6 +12,9 @@ const routes = possiblePrefixes.map((prefix) => {
     }, {
       path: 'select_details',
       component: components.SelectAddressTable
+    },{
+      path: 'view_address',
+      component: components.GeocodedMap
     }]
   }
 });
