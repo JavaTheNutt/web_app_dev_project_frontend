@@ -31,10 +31,10 @@
         </md-select>
       </md-input-container>
       <div class="form-flex-container--button">
-        <md-button class="md-raised md-primary" type="button" @click.native="submitData"
-                   :disabled="!checkAddressButtonEnabled">Check Address
+        <md-button class="md-raised md-primary md-icon-button" type="button" @click.native="submitData"
+                   :disabled="!checkAddressButtonEnabled"><!--Check Address--><md-icon>search</md-icon>
         </md-button>
-        <md-button class="md-raised md-accent" type="button" @click.native="resetForm" :disabled="!formHasValues">Reset</md-button>
+        <md-button class="md-raised md-accent md-icon-button" type="button" @click.native="resetForm" :disabled="!formHasValues"><!--Reset--><md-icon>refresh</md-icon></md-button>
       </div>
     </form>
   </div>
@@ -46,8 +46,10 @@
   import types from '../vuex/types';
   import countryTypes from '@/app/store/countries/types';
   import addAddressBus from '@/app/add_address/service/bus';
+  import MdIcon from '../../../../node_modules/vue-material/src/components/mdIcon/mdIcon.vue';
 
   export default {
+    components: {MdIcon},
     name: 'geocoded_form',
     computed: {
       ...mapGetters({getCountryNames: countryTypes.getters.getCountryNames, getRoutePrefix: types.getters.getRoutePrefix}),

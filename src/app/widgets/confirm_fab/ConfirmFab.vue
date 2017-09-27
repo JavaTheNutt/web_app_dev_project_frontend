@@ -1,10 +1,10 @@
 <template>
   <div class="button-container">
-    <md-button md-theme="secondary" class="md-raised md-accent md-icon-button accept-button" @click.native="accept"
+    <md-button class="md-accent md-raised md-icon-button accept-button" @click.native="accept"
                type="button">
       <md-icon >done</md-icon>
     </md-button>
-    <md-button class="md-raised md-warn md-icon-button" type="button" @click.native="reject">
+    <md-button class="md-primary md-icon-button md-raised" type="button" @click.native="reject">
       <md-icon>clear</md-icon>
     </md-button>
   </div>

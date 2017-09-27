@@ -1,7 +1,8 @@
 <template>
   <div>
     <h1 class="md-title">This is the profile page</h1>
-    <md-button class="md-raised md-accent" @click.native="addAddress"></md-button>
+    <!--fixme update to icon buttons-->
+    <md-button class="md-raised md-accent" @click.native="addAddress">Add Address</md-button>
   </div>
 </template>
 <script>
