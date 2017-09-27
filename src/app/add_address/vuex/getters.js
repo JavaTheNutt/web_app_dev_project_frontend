@@ -20,5 +20,8 @@ export default {
   },
   [types.getters.getHasMultipleAddresses](state){
     return state.possibleAddresses.length > 1;
+  },
+  [types.getters.getSelectedAddressText](state){
+    return state.selectedAddress.text
   }
 }

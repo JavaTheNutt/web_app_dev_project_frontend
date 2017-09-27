@@ -1,6 +1,7 @@
 import * as Logger from 'loglevel';
 import types from './types';
 import {geocodeAddress} from '@/app/services/geocoding';
+import addAddressBus from '@/app/add_address/service/bus';
 
 export default {
   [types.actions.a_setFormValues]: ({commit}, addressDetails) => {
@@ -17,6 +18,11 @@ export default {
     try {
       const geocodeResults = await geocodeAddress(address);
       Logger.info(`results assumed fetched`);
+      if(geocodeResults.data.results.length === 0){
+        Logger.info(`no results found`);
+        addAddressBus.$emit('noAddressesFound');
+        return;
+      }
       if(geocodeResults.data.results.length === 1){
         Logger.info(`exactly one result returned from geocode operation`);
         const formattedResults = geocodeResults.data.results.map((address) => {
@@ -25,14 +31,15 @@ export default {
             text: address.formatted_address
           }
         });
-        commit(types.mutations.m_setSelectedAddress, {selectedAddress: formattedResults});
-        commit(types.mutations.setResults, {data:[]});
+        commit(types.mutations.m_setSelectedAddress, {selectedAddress: formattedResults[0]});
+        commit(types.mutations.m_setResults, {data:[]});
         return;
       }
+      addAddressBus.$emit('multipleAddressesFound');
       commit(types.mutations.m_setResults, {data: geocodeResults.data.results});
       commit(types.mutations.m_setSelectedAddress, {selectedAddress: {}});
     } catch (e) {
-      Logger.error(`error fetching results`);
+      Logger.error(`error fetching results: ${e}`);
     }
   },
   [types.actions.a_setSelectedAddress]: ({commit}, selectedAddress) => {

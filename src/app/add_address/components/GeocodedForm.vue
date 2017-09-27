@@ -44,7 +44,8 @@
   import * as Logger from 'loglevel';
   import _ from 'lodash';
   import types from '../vuex/types';
-  import countryTypes from '@/app/store/countries/types'
+  import countryTypes from '@/app/store/countries/types';
+  import addAddressBus from '@/app/add_address/service/bus';
 
   export default {
     name: 'geocoded_form',
@@ -119,6 +120,13 @@
       this.sendableAddress.address3 = initalAddressValues.address3;
       this.sendableAddress.country  = initalAddressValues.country;
 
+      addAddressBus.$on('multipleAddressesFound', ()=>{
+        Logger.info(`multiple address event caught in form, redirecting to table`);
+        this.$router.push(`${this.getRoutePrefix}/add_address/select_details`);
+      });
+      addAddressBus.$on('noAddressesFound', ()=>{
+        Logger.info(`form caught no address event`);
+      })
       //fixme: the way this is currently being done is awful. needs refactoring
 /*
       this.$store.subscribe((mutation, state) => {

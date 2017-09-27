@@ -56,10 +56,11 @@
     computed: {
       messages() {
         return Object.keys(this.selectedAddress).length > 0 ?
-          ['Is this the address that you would like to choose?', this.selectedAddress.text] : false;
+          ['Is this the address that you would like to choose?', this.selectedAddressText] : false;
       }, ...mapGetters({
         selectedAddress: types.getters.getSelectedAddress,
-        possibleAddresses: types.getters.getPossibleAddresses
+        possibleAddresses: types.getters.getPossibleAddresses,
+        selectedAddressText: types.getters.getSelectedAddressText
       })
     },
     mounted() {
