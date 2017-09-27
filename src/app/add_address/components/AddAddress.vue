@@ -1,8 +1,6 @@
 <template>
   <div>
     <h1 class="md-title">This is the add address view</h1>
-    <!--<router-view @addressSet="setCheckedAddress"></router-view>-->
-    <!--<geocoded-form @addressSet="setCheckedAddress" v-if="formShown"></geocoded-form>-->
     <router-view></router-view>
     <confirm-text @accept="acceptAddress" @reject="rejectAddress" :messages="messages" v-if="messages"></confirm-text>
     <!--<div v-if="mapShown">
@@ -31,18 +29,7 @@
     },
     name: 'add_address',
     data() {
-      return {
-        mapShown: false,
-        formShown: true,
-        mapMarkerShown: false,
-        selectedAddressMarker: {
-          position: {
-            lat: 10,
-            lng: 10
-          }
-        },
-        chosenAddress: {}
-      }
+      return {}
     },
     created() {
       Logger.info(`checking if user has geolocation`);
@@ -73,24 +60,24 @@
       this.$store.dispatch(types.actions.a_resetFormValues);
     },
     methods: {
-      setCheckedAddress(addressDetails) {
-        const details = JSON.parse(addressDetails);
-        Logger.info(`address event recived from child component`);
-        Logger.info(`details passed: ${JSON.stringify(addressDetails)}`);
-        this.chosenAddress = details;
-        this.formShown     = false;
-        this.mapShown      = true;
-      },
       acceptAddress() {
         Logger.info(`accept address clicked`);
-        //here i will probably move the selected address to the store, as I now have its context.
-        //this should also return to its calling function, or emit this address if the component is to be embedded
+        //here is where i will check the current route and if the form or the table is shown, move to the map. If the map is shown, return to the caller
       },
       rejectAddress() {
         Logger.info(`reject address clicked`);
-        this.chosenAddress = null;
-        this.mapShown      = false;
-        this.formShown     = true;
+        const currentLocation = this.$route.path.substring(this.$route.path.indexOf('/add_address') + '/add_address'.length);
+        Logger.info(`current location: ${currentLocation}`);
+        if (currentLocation === '/enter_details') {
+          Logger.info(`location is form, hiding choice`);
+          this.$store.dispatch(types.actions.a_resetSelectedAddress);
+          return;
+        }
+        if (currentLocation === '/select_details') {
+          Logger.info(`location is table, returning to form`);
+          this.$store.dispatch(types.actions.a_resetSelectedAddress);
+          this.$router.go(-1);
+        }
       }
     }
   }
