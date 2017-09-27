@@ -3,15 +3,7 @@
     <h1 class="md-title">This is the add address view</h1>
     <router-view></router-view>
     <confirm-text @accept="acceptAddress" @reject="rejectAddress" :messages="messages" v-if="messages"></confirm-text>
-    <!--<div v-if="mapShown">
-      <confirm_fab @accept="acceptAddress" @reject="rejectAddress"></confirm_fab>
-    </div>
-    <div v-if="mapShown" class="map-container">
-      <gmap-map :center="{lat:chosenAddress.geometry.lat, lng:chosenAddress.geometry.lng}" :zoom="20"
-                map-type-id="terrain" class="custom-view-map">
-        <gmap-marker :position="chosenAddress.geometry"></gmap-marker>
-      </gmap-map>
-    </div>-->
+    <router-view name="mapView"></router-view>
   </div>
 </template>
 <script>
