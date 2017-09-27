@@ -49,7 +49,7 @@
   export default {
     name: 'geocoded_form',
     computed: {
-      ...mapGetters({getCountryNames: countryTypes.getters.getCountryNames}),
+      ...mapGetters({getCountryNames: countryTypes.getters.getCountryNames, getRoutePrefix: types.getters.getRoutePrefix}),
       checkAddressButtonEnabled() { //this function will watch to see if the check address button should be enabled
         if (this.sendableAddress.address1.length < 1) {
           Logger.info(`address1 does not exist`);
@@ -85,7 +85,7 @@
         //this.$store.dispatch(types.actions.a_setFormValues, this.sendableAddress);
         this.$emit('addressSelected', JSON.stringify(this.sendableAddress));
         this.$store.dispatch(types.actions.a_fetchResults, this.sendableAddress);
-        this.$router.push('/add_address/select_details'); //fixme this should emit the event to the parent and the parent should handle routing
+        this.$router.push(`${this.getRoutePrefix}/add_address/select_details`); //fixme this should emit the event to the parent and the parent should handle routing
       },
 
       resetForm() {
