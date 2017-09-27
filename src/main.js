@@ -49,11 +49,17 @@ Vue.material.registerTheme({
   }
 });
 router.beforeEach((to, from, next)=>{
-  if(store.state.auth.loggedIn){
-    Logger.info(`user logged in`);
-    return next();
+  Logger.info(`before enter navigation guard called`);
+  if(to.meta.requiresAuth){
+    Logger.info(`route requires auth`);
+    if(store.state.auth.loggedIn){
+      Logger.info(`user logged in`);
+      return next();
+    }
+    Logger.info(`user not logged in`);
+    return next('/');
   }
-  Logger.info(`user not logged in`);
+  Logger.info(`route does not require auth`);
   return next();
 });
 /* eslint-disable no-new */

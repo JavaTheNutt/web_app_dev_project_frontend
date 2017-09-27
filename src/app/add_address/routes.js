@@ -6,6 +6,7 @@ const routes = possiblePrefixes.map((prefix) => {
     path: `${prefix}/add_address`,
     component: components.AddAddress,
     redirect: `${prefix}/add_address/enter_details`,
+    meta:{requiresAuth: true},
     children:[{
       path:'enter_details',
       component: components.GeocodedForm,
