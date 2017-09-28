@@ -4,30 +4,10 @@
     <!--fixme update to icon buttons-->
     <div class="card-container--flex">
       <div class="card-container-inner--flex">
-        <md-card>
-          <md-card-header><h1 class="md-title">Addresses</h1></md-card-header>
-          <md-card-actions>
-            <md-button class="md-raised md-accent md-icon-button" @click.native="addAddress">
-              <md-icon>add</md-icon>
-            </md-button>
-          </md-card-actions>
-        </md-card>
+        <address-details-card></address-details-card>
       </div>
       <div class="card-container-inner--flex">
-        <md-card>
-          <md-card-header><h1 class="md-title">Addresses</h1></md-card-header>
-          <md-button class="md-raised md-accent md-icon-button" @click.native="addAddress">
-            <md-icon>add</md-icon>
-          </md-button>
-        </md-card>
-      </div>
-      <div class="card-container-inner--flex">
-        <md-card>
-          <md-card-header><h1 class="md-title">Addresses</h1></md-card-header>
-          <md-button class="md-raised md-accent md-icon-button" @click.native="addAddress">
-            <md-icon>add</md-icon>
-          </md-button>
-        </md-card>
+        <user-details-card></user-details-card>
       </div>
     </div>
   </div>
@@ -38,9 +18,13 @@
   import MdButton from '../../../../node_modules/vue-material/src/components/mdButton/mdButton.vue';
   import MdCard from '../../../../node_modules/vue-material/src/components/mdCard/mdCard.vue';
   import MdCardHeader from '../../../../node_modules/vue-material/src/components/mdCard/mdCardHeader.vue';
+  import UserDetailsCard from './UserDetailsCard.vue';
+  import AddressDetailsCard from './AddressDetailsCard.vue';
 
   export default {
     components: {
+      AddressDetailsCard,
+      UserDetailsCard,
       MdCardHeader,
       MdCard,
       MdButton,
