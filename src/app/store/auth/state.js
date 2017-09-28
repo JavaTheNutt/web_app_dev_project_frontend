@@ -1,3 +1,7 @@
 export default {
-  loggedIn: false
+  loggedIn: false,
+  userDetails:{
+    firebaseUid: '',
+    userEmail: ''
+  }
 }

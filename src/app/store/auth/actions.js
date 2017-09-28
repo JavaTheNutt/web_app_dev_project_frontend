@@ -24,6 +24,7 @@ export default {
     Logger.info(`current user: ${JSON.stringify(currentUser)}`);
     if (currentUser) {
       Logger.info(`user logged in`);
+      commit(types.mutations.m_setUserDetails, {userDetails:{userEmail: currentUser.email, firebaseUid: currentUser.uid}});
       return commit(types.mutations.m_logInUser);
     }
     Logger.info(`user not logged in`);

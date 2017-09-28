@@ -10,6 +10,11 @@ export default {
   [types.mutations.m_logOutUser](state){
     Logger.info(`log out mutation called`);
     state.loggedIn = false;
-
+    state.userDetails = {userEmail: '', firebaseUid: ''}
+  },
+  [types.mutations.m_setUserDetails](state, {userDetails}){
+    Logger.info(`mutation called to add user details to state. User details: ${JSON.stringify(userDetails)}`);
+    state.userDetails.userEmail = userDetails.userEmail;
+    state.userDetails.firebaseUid = userDetails.firebaseUid;
   }
 }

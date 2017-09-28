@@ -1,13 +1,12 @@
 <template>
   <div>
     <h1 class="md-title">This is the profile page</h1>
-    <!--fixme update to icon buttons-->
     <div class="card-container--flex">
       <div class="card-container-inner--flex">
         <address-details-card></address-details-card>
       </div>
       <div class="card-container-inner--flex">
-        <user-details-card></user-details-card>
+        <user-details-card :email="emailAddress"></user-details-card>
       </div>
     </div>
   </div>
@@ -20,6 +19,9 @@
   import MdCardHeader from '../../../../node_modules/vue-material/src/components/mdCard/mdCardHeader.vue';
   import UserDetailsCard from './UserDetailsCard.vue';
   import AddressDetailsCard from './AddressDetailsCard.vue';
+  import {mapGetters} from 'vuex';
+  import types from '../vuex/types';
+  import authTypes from '@/app/store/auth/types';
 
   export default {
     components: {
@@ -29,6 +31,9 @@
       MdCard,
       MdButton,
       MdAvatar
+    },
+    computed:{
+      ...mapGetters({emailAddress: authTypes.getters.getUserEmail})
     },
     name: 'profile',
     methods: {
