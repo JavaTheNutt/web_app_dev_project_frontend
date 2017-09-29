@@ -52,13 +52,14 @@
         const selectedAddress = Object.assign({}, this.$store.getters[addAddressTypes.getters.getSelectedAddress]);
         Logger.info(`fetched address is: ${JSON.stringify(selectedAddress)}`);
         firebase.database().ref(`/users/${this.firebaseId}/addresses`).push(selectedAddress);
-        //fixme need to dispatch event to clear store
         this.$store.dispatch(addAddressTypes.actions.a_resetComponent);
+        //this.$router.replace(this.$route.path); //remove isNewAddress flag
       }
     },
     mounted(){
-
-
+      //this wasn't working when in the created hook. I will have to look more closely into the lifecycle to see why this component
+      //was created before the router was instantiated.
+      if(this.$route.query.isNewAddress) this.$router.replace(this.$route.path); //remove isNewAddress flag if present
     }
   }
 </script>
