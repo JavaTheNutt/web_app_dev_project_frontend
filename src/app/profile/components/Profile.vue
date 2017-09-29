@@ -53,7 +53,6 @@
         Logger.info(`fetched address is: ${JSON.stringify(selectedAddress)}`);
         firebase.database().ref(`/users/${this.firebaseId}/addresses`).push(selectedAddress);
         this.$store.dispatch(addAddressTypes.actions.a_resetComponent);
-        //this.$router.replace(this.$route.path); //remove isNewAddress flag
       }
     },
     mounted(){
