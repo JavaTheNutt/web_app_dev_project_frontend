@@ -57,6 +57,13 @@ export default {
   [types.actions.a_resetRoutePrefix]:({commit})=>{
     Logger.info(`action called to set the route prefix`);
     commit(types.mutations.m_setRoutePrefix, {prefix: ''});
+  },
+  [types.actions.a_resetComponent]:({commit})=>{
+    Logger.info(`action called to reset the component`);
+    commit(types.mutations.m_setFormValues, {data:{}});
+    commit(types.mutations.m_setSelectedAddress, {selectedAddress:{}});
+    commit(types.mutations.m_setRoutePrefix, {prefix: ''});
+    commit(types.mutations.m_setHasMultipleAddresses, {hasMultipleAddresses: false});
   }
 }
 

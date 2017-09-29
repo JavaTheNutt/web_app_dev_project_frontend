@@ -44,18 +44,21 @@
     methods: {
     },
     created(){
+      Logger.info(`profile page mounted. is there a new address to fetch? ${this.$route.query.isNewAddress ? 'yes':'no'}`);
       this.firebaseId = this.$store.getters[authTypes.getters.getFirebaseId];
       Logger.info(`firebase uid is ${this.firebaseId}`);
-    },
-    mounted(){
-      Logger.info(`profile page mounted. is there a new address to fetch? ${this.$route.query.isNewAddress}`);
       if(this.$route.query.isNewAddress){
         Logger.info(`fetching address`);
         const selectedAddress = Object.assign({}, this.$store.getters[addAddressTypes.getters.getSelectedAddress]);
         Logger.info(`fetched address is: ${JSON.stringify(selectedAddress)}`);
         firebase.database().ref(`/users/${this.firebaseId}/addresses`).push(selectedAddress);
         //fixme need to dispatch event to clear store
+        this.$store.dispatch(addAddressTypes.actions.a_resetComponent);
       }
+    },
+    mounted(){
+
+
     }
   }
 </script>
