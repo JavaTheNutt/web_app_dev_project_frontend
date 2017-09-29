@@ -3,7 +3,7 @@
     <h1 class="md-title">This is the profile page</h1>
     <div class="card-container--flex">
       <div class="card-container-inner--flex">
-        <address-details-card></address-details-card>
+        <address-details-card :uid="firebaseId"></address-details-card>
       </div>
       <div class="card-container-inner--flex">
         <user-details-card :email="emailAddress"></user-details-card>
@@ -26,6 +26,9 @@
   import firebase from 'firebase';
 
   export default {
+    data(){
+     return{ firebaseId : ''}
+    },
     components: {
       AddressDetailsCard,
       UserDetailsCard,
@@ -40,15 +43,18 @@
     name: 'profile',
     methods: {
     },
+    created(){
+      this.firebaseId = this.$store.getters[authTypes.getters.getFirebaseId];
+      Logger.info(`firebase uid is ${this.firebaseId}`);
+    },
     mounted(){
       Logger.info(`profile page mounted. is there a new address to fetch? ${this.$route.query.isNewAddress}`);
       if(this.$route.query.isNewAddress){
         Logger.info(`fetching address`);
         const selectedAddress = Object.assign({}, this.$store.getters[addAddressTypes.getters.getSelectedAddress]);
         Logger.info(`fetched address is: ${JSON.stringify(selectedAddress)}`);
-        const firebaseUid = this.$store.getters[authTypes.getters.getFirebaseId];
-        Logger.info(`firebase uid is ${firebaseUid}`);
-        firebase.database().ref(`/users/${firebaseUid}/addresses`).push(selectedAddress);
+        firebase.database().ref(`/users/${this.firebaseId}/addresses`).push(selectedAddress);
+        //fixme need to dispatch event to clear store
       }
     }
   }
