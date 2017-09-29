@@ -61,6 +61,7 @@
         if(this.currentLocation === '/enter_details' || this.currentLocation === '/select_details'){
           Logger.info(`address selected while in either form or map, switching to map`);
           this.$router.push(`${this.refPath}/add_address/view_address`);
+          return;
         }
         //here is where i will check the current route and if the form or the table is shown, move to the map. If the map is shown, return to the caller
         if(this.currentLocation === '/view_address'){
