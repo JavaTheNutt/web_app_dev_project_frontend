@@ -9,7 +9,14 @@
   </md-card>
 </template>
 <script>
+  import * as Logger from 'loglevel';
   export default{
-    name: 'address-details-card'
+    name: 'address-details-card',
+    methods:{
+      addAddress() {
+        Logger.info(`add address button clicked from view address component`);
+        this.$router.push('/profile/add_address')
+      }
+    }
   }
 </script>

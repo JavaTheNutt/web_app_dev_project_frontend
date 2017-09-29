@@ -22,6 +22,8 @@
   import {mapGetters} from 'vuex';
   import types from '../vuex/types';
   import authTypes from '@/app/store/auth/types';
+  import addAddressTypes from  '@/app/add_address/vuex/types';
+  import firebase from 'firebase';
 
   export default {
     components: {
@@ -37,9 +39,16 @@
     },
     name: 'profile',
     methods: {
-      addAddress() {
-        Logger.info(`add address button clicked from profile`);
-        this.$router.push('/profile/add_address')
+    },
+    mounted(){
+      Logger.info(`profile page mounted. is there a new address to fetch? ${this.$route.query.isNewAddress}`);
+      if(this.$route.query.isNewAddress){
+        Logger.info(`fetching address`);
+        const selectedAddress = Object.assign({}, this.$store.getters[addAddressTypes.getters.getSelectedAddress]);
+        Logger.info(`fetched address is: ${JSON.stringify(selectedAddress)}`);
+        const firebaseUid = this.$store.getters[authTypes.getters.getFirebaseId];
+        Logger.info(`firebase uid is ${firebaseUid}`);
+        firebase.database().ref(`/users/${firebaseUid}/addresses`).push(selectedAddress);
       }
     }
   }

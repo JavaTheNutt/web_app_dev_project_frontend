@@ -63,6 +63,10 @@
           this.$router.push(`${this.refPath}/add_address/view_address`);
         }
         //here is where i will check the current route and if the form or the table is shown, move to the map. If the map is shown, return to the caller
+        if(this.currentLocation === '/view_address'){
+          Logger.info(`address selected while in map, returning to referrer`);
+          this.$router.push(`${this.refPath}?isNewAddress=true`);
+        }
       },
       rejectAddress() {
         Logger.info(`reject address clicked`);
@@ -74,7 +78,7 @@
           return;
         }
         if (this.currentLocation === '/select_details' || this.currentLocation === '/view_address') {
-          Logger.info(`location is table, returning to form`);
+          Logger.info(`location is table or map, returning one step`);
           this.$store.dispatch(types.actions.a_resetSelectedAddress);
           this.$router.go(-1);
         }
