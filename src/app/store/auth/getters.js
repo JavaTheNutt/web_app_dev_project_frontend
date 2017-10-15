@@ -4,5 +4,6 @@ export default {
   [types.getters.getUserEmail]: state => {return state.userDetails.userEmail},
   [types.getters.getFirebaseId]: state => {return state.userDetails.firebaseUid},
   [types.getters.getUserDetails]: state => {return state.userDetails},
-  [types.getters.initialLogin]: state => {return state.initialLogin}
+  [types.getters.initialLogin]: state => {return state.initialLogin},
+  [types.getters.preferredHomepage]: state => {return state.preferredHomePage}
 }

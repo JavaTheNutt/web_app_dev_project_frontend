@@ -5,6 +5,7 @@ import bus from '../../services/bus';
 import types from './types';
 import router from '@/router';
 import axios from 'axios';
+const backendUrl = require('../../../../config/private').backendURL;
 export default {
   [types.actions.a_logInUser]: async ({dispatch}, user) => {
     Logger.info(`login user action attempting to sign in`);
@@ -24,7 +25,7 @@ export default {
     const accessToken = await firebase.auth().currentUser.getIdToken(true);
     Logger.info(`posting token: ${JSON.stringify(accessToken.toString())}`);
     const headers  = {token: accessToken};
-    const serverResponse = await axios.post('http://localhost:3000/user', null, {headers});
+    const serverResponse = await axios.post(`${backendUrl}user`, null, {headers});
     Logger.info(`response from server: ${JSON.stringify(serverResponse)}`);
 
   },
@@ -33,12 +34,6 @@ export default {
     const currentUser = firebase.auth().currentUser;
     Logger.info(`current user: ${JSON.stringify(currentUser)}`);
     if (currentUser) {
-      //Logger.info(`getters: ${JSON.stringify(getters)}`);
-
-      if(getters[types.getters.initialLogin]){
-        Logger.info(`auth handler detected initial login`);
-        dispatch(types.actions.a_createServerUser);
-      }
       Logger.info(`user logged in`);
       commit(types.mutations.m_setUserDetails, {
         userDetails: {
@@ -46,7 +41,16 @@ export default {
           firebaseUid: currentUser.uid
         }
       });
-      return commit(types.mutations.m_logInUser);
+      commit(types.mutations.m_logInUser);
+      if(getters[types.getters.initialLogin]){
+        Logger.info(`auth handler detected initial login`);
+        dispatch(types.actions.a_createServerUser);
+        commit(types.mutations.m_setPreferredHomepage, {preferredHomepage: '/profile'})
+      }
+      const preferredHompage = getters[types.getters.preferredHomepage];
+      Logger.info(`preferred homepage: ${preferredHompage}`);
+      router.push(preferredHompage);
+      return;
     }
     Logger.info(`user not logged in`);
     router.push('/');

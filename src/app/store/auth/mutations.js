@@ -20,5 +20,9 @@ export default {
   [types.mutations.m_setIsInitial](state, {isInitial}){
     Logger.info(`mutattion called to set is initial to ${isInitial}`);
     state.initialLogin = isInitial;
+  },
+  [types.mutations.m_setPreferredHomepage](state, {preferredHomepage}){
+    Logger.info(`mutation called to update preferred homepage`);
+    state.preferredHomePage = preferredHomepage;
   }
 }

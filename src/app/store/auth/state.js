@@ -4,5 +4,6 @@ export default {
     firebaseUid: '',
     userEmail: ''
   },
-  initialLogin: false
+  initialLogin: false,
+  preferredHomePage: '/profile'
 }
