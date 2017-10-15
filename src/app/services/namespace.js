@@ -1,7 +1,8 @@
 /**
- * This module provides a handy way of namespacing vuex store modules. I found this in this github issue: https://github.com/vuejs/vuex/issues/335
+ * This module provides a handy way of namespacing vuex store modules. I found this in this github issue:
+ * https://github.com/vuejs/vuex/issues/335
  */
-function mapValues (obj, f) {
+function mapValues(obj, f) {
   const res = {};
   Object.keys(obj).forEach(key => {
     res[key] = f(obj[key], key)
@@ -13,8 +14,8 @@ export default (module, types) => {
   let newObj = {};
   mapValues(types, (names, type) => {
     newObj[type] = {};
-    types[type].forEach(name=> {
-      var newKey = module + ':' + name;
+    types[type].forEach(name => {
+      var newKey         = module + ':' + name;
       newObj[type][name] = newKey;
     });
   });
