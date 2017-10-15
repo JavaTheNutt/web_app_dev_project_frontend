@@ -16,5 +16,9 @@ export default {
     Logger.info(`mutation called to add user details to state. User details: ${JSON.stringify(userDetails)}`);
     state.userDetails.userEmail = userDetails.userEmail;
     state.userDetails.firebaseUid = userDetails.firebaseUid;
+  },
+  [types.mutations.m_setIsInitial](state, {isInitial}){
+    Logger.info(`mutattion called to set is initial to ${isInitial}`);
+    state.initialLogin = isInitial;
   }
 }

@@ -31,7 +31,16 @@ export default {
     router.push('/');
     return commit(types.mutations.m_logOutUser);
   },
+  [types.actions.a_setIsInitial]: ({commit})=>{
+    Logger.info(`action called to set is initial to true`);
+    commit(types.mutations.m_setIsInitial, {isInitial: true})
+  },
+  [types.actions.a_unsetIsInitial]: ({commit})=>{
+    Logger.info(`action called to set is initial to false`);
+    commit(types.mutations.m_setIsInitial, {isInitial: false})
+  },
   [types.actions.a_createNewUser]: async ({commit}, details) => {
+    
     try {
       Logger.info(`sign up function called in Firebase service`);
       await firebase.auth().createUserWithEmailAndPassword(details.email, details.password);

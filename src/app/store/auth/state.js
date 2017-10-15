@@ -3,5 +3,6 @@ export default {
   userDetails:{
     firebaseUid: '',
     userEmail: ''
-  }
+  },
+  initialLogin: false
 }
