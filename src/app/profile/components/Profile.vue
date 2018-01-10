@@ -24,6 +24,7 @@
   import authTypes from '@/app/store/auth/types';
   import addAddressTypes from  '@/app/add_address/vuex/types';
   import firebase from 'firebase';
+  import {addPersonalAddress} from '../service/profileService';
 
   export default {
     data(){
@@ -51,7 +52,8 @@
         Logger.info(`fetching address`);
         const selectedAddress = Object.assign({}, this.$store.getters[addAddressTypes.getters.getSelectedAddress]);
         Logger.info(`fetched address is: ${JSON.stringify(selectedAddress)}`);
-        firebase.database().ref(`/users/${this.firebaseId}/addresses`).push(selectedAddress);
+        //firebase.database().ref(`/users/${this.firebaseId}/addresses`).push(selectedAddress);
+        addPersonalAddress(selectedAddress);
         this.$store.dispatch(addAddressTypes.actions.a_resetComponent);
       }
     },

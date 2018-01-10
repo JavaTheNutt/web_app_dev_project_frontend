@@ -24,8 +24,9 @@ export default {
     Logger.info(`action called to create new server user`);
     const accessToken = await firebase.auth().currentUser.getIdToken(true);
     Logger.info(`posting token: ${JSON.stringify(accessToken.toString())}`);
-    const headers  = {token: accessToken};
-    const serverResponse = await axios.post(`${backendUrl}user`, null, {headers});
+    const headers  = {Authorization: `Bearer ${accessToken}`};
+    Logger.info(`attempting to post new user to ${backendUrl}user/new`)
+    const serverResponse = await axios.post(`${backendUrl}user/new`, null, {headers});
     Logger.info(`response from server: ${JSON.stringify(serverResponse)}`);
 
   },
@@ -70,10 +71,6 @@ export default {
       Logger.info(`sign up function called in Firebase service`);
       await firebase.auth().createUserWithEmailAndPassword(details.email, details.password);
       Logger.info(`user appears correctly created`);
-      /*router.push({
-        name: 'profile',
-        query: {isEdit: true}
-      });*/
     } catch (err) {
       Logger.warn(`error creating firebase account`);
       bus.$emit('showSnack', handleFirebaseError(err.code))
@@ -90,7 +87,7 @@ export default {
   [types.actions.a_logOutUser]: async ({dispatch}) => {
     Logger.info(`request received to log out user`);
     try {
-      await firebase.auth().signOut(); //here is where the error occurs
+      await firebase.auth().signOut();
       Logger.info(`user assumed signed out, dispatching auth change event`);
     } catch (err) {
       Logger.warn(`there was an error while signing out of firebase: ${err}`);
